@@ -1,0 +1,43 @@
+# Welcome to the sample config file
+# Below you will find various config sections and options
+# Default values are shown
+
+# The string to prefix messages with to talk to the bot in group chats
+command_prefix: "!c"
+
+# Options for connecting to the bot's Matrix account
+matrix:
+  # The Matrix User ID of the bot account
+  user_id: "@bot:example.com"
+  # Matrix account password
+  user_password: ""
+  # The URL of the homeserver to connect to
+  homeserver_url: https://example.com
+  # The device ID that is **non pre-existing** device
+  # If this device ID already exists, messages will be dropped silently in encrypted rooms
+  device_id: ABCDEFGHIJ
+  # What to name the logged in device
+  device_name: nio-template
+
+storage:
+  # The path to the database
+  database_filepath: "bot.db"
+  # The path to a directory for internal bot storage
+  # containing encryption keys, sync tokens, etc.
+  store_filepath: "./store"
+
+# Logging setup
+logging:
+  # Logging level
+  # Allowed levels are 'INFO', 'WARNING', 'ERROR', 'DEBUG' where DEBUG is most verbose
+  level: INFO
+  # Configure logging to a file
+  file_logging:
+    # Whether logging to a file is enabled
+    enabled: false
+    # The path to the file to log to. May be relative or absolute
+    filepath: bot.log
+  # Configure logging to the console output
+  console_logging:
+    # Whether logging to the console is enabled
+    enabled: true
