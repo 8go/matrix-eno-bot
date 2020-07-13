@@ -1,3 +1,33 @@
+# matrix-eno-bot
+
+![matrix-eno-bot icon](https://upload.wikimedia.org/wikipedia/commons/3/37/Nsibidi.png)
+
+`matrix-eno-bot` is a [Matrix](https://matrix.org) bot based on the Python 3 bot template [nio-template](https://github.com/8go/nio-template) which in turn is based on the Matrix Python SDK called [matrix-nio](https://github.com/poljar/matrix-nio). The bot, the template and the SDK are all written in Python 3. The commands that the `matrix-eno-bot` comes with are written in `bash` and in `python3`.
+
+Why `eno`? It is a word play. Yes, another word play. `Matrix` is a word play on the [Matrix movies](https://en.wikipedia.org/wiki/The_Matrix_(franchise)). `matrix-nio` one would guess is a word play on the character [Neo](https://en.wikipedia.org/wiki/Neo_(The_Matrix)), in the Matrix movies. Both `Neo` and `nio` sound the same. They are [homophones](https://en.wikipedia.org/wiki/Homophone). And `eno` is just a randomized version of `Neo`, an [anagram](https://en.wikipedia.org/wiki/Anagram) of Neo.
+
+Eno is also another name for the [Ibibio tribe](https://en.wikipedia.org/wiki/Ibibio_people) in Nigeria. Hence, the "logo" which is nothing more than 3 Nsibidi symbols taken from [Wikipedia](https://en.wikipedia.org/wiki/Ibibio_people). 
+
+## History and Past
+
+The first version of the bot was [tiny-matrix-bot plus](https://github.com/8go/tiny-matrix-bot) which was based on [matrix-python-sdk](https://github.com/matrix-org/matrix-python-sdk). Since `matrix-python-sdk` is no longer actively supported and end-to-end-encryption comes out of the box in `matrix-nio`, the switch to `nio-template` was made. 
+
+## Legal
+
+There is no support and no warranty. 
+
+
+
+---
+---
+---
+
+
+
+
+
+
+
 # Nio Template
 
 A template for creating bots with
