@@ -1,3 +1,5 @@
+TODO: This bot is not ready yet. Please come back in 1-2 weeks! Thank you!
+
 # matrix-eno-bot
 
 ![matrix-eno-bot icon](https://upload.wikimedia.org/wikipedia/commons/3/37/Nsibidi.png)
