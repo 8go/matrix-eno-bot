@@ -2,7 +2,7 @@
 # It helps you to run the bot as a system service
 
 # Installation of matrix-eno-bot as service:
-# cp matrix-eno-bot.service.original matrix-eno-bot.service
+# cp matrix-eno-bot.service.example matrix-eno-bot.service
 # Modify/Configure the matrix-eno-bot.service to fit your needs
 # nano matrix-eno-bot.service
 # Copy your service file to system directory
