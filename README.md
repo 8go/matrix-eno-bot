@@ -4,14 +4,16 @@ TODO: This bot is not ready yet. Please come back in 1-2 weeks! Thank you!
 
 # matrix-eno-bot
 
-![matrix-eno-bot icon](https://upload.wikimedia.org/wikipedia/commons/3/37/Nsibidi.png)
-
 `matrix-eno-bot` is a [Matrix](https://matrix.org) bot based on the Python 3 bot template [nio-template](https://github.com/8go/nio-template) which in turn is based on the Matrix Python SDK called [matrix-nio](https://github.com/poljar/matrix-nio). The bot, the template and the SDK are all written in Python 3. The commands that the `matrix-eno-bot` comes with are written in `bash` and in `python3`.
 
 ## Naming: Eno?
 Why `eno`? It is a word play. Yes, another word play. `Matrix` is a word play on the [Matrix movies](https://en.wikipedia.org/wiki/The_Matrix_(franchise)). `matrix-nio` one would guess is a word play on the character [Neo](https://en.wikipedia.org/wiki/Neo_(The_Matrix)), in the Matrix movies. Both `Neo` and `nio` sound the same. They are [homophones](https://en.wikipedia.org/wiki/Homophone). And `eno` is just a randomized version of `Neo`, an [anagram](https://en.wikipedia.org/wiki/Anagram) of Neo.
 
-Eno is also another name for the [Ibibio tribe](https://en.wikipedia.org/wiki/Ibibio_people) in Nigeria. Hence, the "logo" which is nothing more than an Nsibidi symbols taken from [Wikipedia](https://en.wikipedia.org/wiki/Ibibio_people). To me this Nsibidi symbol chosen as the logo resembles a stylized `E`. `E` of course for `eno`.
+Eno is also another name for the [Ibibio tribe](https://en.wikipedia.org/wiki/Ibibio_people) in Nigeria. Have a look at their unusual symbols.
+
+![matrix-eno-bot icon](eno/logos/Nsibidi-small.png)
+
+Hence, the "logo" which is nothing more than an Nsibidi symbols taken from [Wikipedia](https://en.wikipedia.org/wiki/Ibibio_people). To me the Nsibidi symbol chosen for the logo resembles a stylized `E`. `E` of course for `eno`.
 
 And a month after creating this repo by pure chance, this [Urban Dictionary link](https://www.urbandictionary.com/define.php?term=Eno) for `eno` popped up. Here, the word `eno` is defined as: _Totally awesome, Wicked cool. Hyperbole of awesome/cool. E.g. Dude, that round of speedball was so eno!_ What a fitting coincidence! Perfect fit! So cool, oops, so eno!
 
