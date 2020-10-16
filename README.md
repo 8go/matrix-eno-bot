@@ -1,4 +1,5 @@
-TODO: This bot is not ready yet. Please come back in 1-2 weeks! Thank you!
+TODO: This bot is ready and complete. It is running for me for months without problems. 
+However, this README.md file has not yet been updated. Please come back in 1-2 weeks to get the updated documentation in this README.md. Thanks. Meanwhile, enjoy the software.
 
 ![matrix-eno-bot icon](eno/logos/eno-logo.svg)
 
