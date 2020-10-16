@@ -1,0 +1,74 @@
+# Welcome to the sample config file
+# Below you will find various config sections and options
+# Default values are shown
+
+# The string to prefix messages with to talk to the bot in group chats
+# Changed from original "!c" to "1z! because on cell phone "!c" seems too
+# complicated.
+command_prefix: "1z"
+
+# Options for connecting to the bot's Matrix account
+matrix:
+  # The Matrix User ID of the bot account
+  user_id: "@bot:example.com"
+  # Matrix account password
+  user_password: ""
+
+  # Matrix account access token
+  # To create a new Matrix device for the bot, use and set the `user_password`
+  # field. Once the device exists, you can optionally replace the
+  # `user_password` with the `access_token` field. Using the `access_token`
+  # field is slightly safer as it does not expose the password of the bot
+  # account. You can use only one or the other: either use the `user_password`
+  # or the `access_token` field. You can find the access token in the Matrix
+  # client where you have registered the bot account or you can find it in
+  # the bot log file. If the logging options are set accordingly the access
+  # token will be logged to the bot log file.
+  # Default: commented out
+  # access_token: "PutYourLongAccessTokenHere"
+
+  # The URL of the homeserver to connect to
+  homeserver_url: https://example.com
+  # The device ID that is **non pre-existing** device
+  # If this device ID already exists, messages will be dropped
+  # silently in encrypted rooms
+  device_id: ABCDEFGHIJ
+  # What to name the device? Often referred to as device name or display name.
+  device_name: eno
+  # Should the bot trust all the devices of its own Matrix account?
+  # Default: false
+  # If false, nothing is done. After login, no device will be automatically
+  # trusted.
+  # If true, once at startup, after logging in, the bot device will
+  # automatically establish trust to all other devices of the bot account.
+  trust_own_devices: false
+  # Do you want to change the device_name of the already existing bot?
+  # Default: false
+  # If false, nothing is done. After creation, device_name will be ignored.
+  # If true, device_name of bot will be changed to value given in device_name.
+  change_device_name: false
+  # encrytion is enabled by default
+
+storage:
+  # The path to the database
+  database_filepath: "bot.db"
+  # The path to a directory for internal bot storage
+  # containing encryption keys, sync tokens, etc.
+  store_filepath: "./store"
+
+# Logging setup
+logging:
+  # Logging level
+  # Allowed levels are 'INFO', 'WARNING', 'ERROR', 'DEBUG'
+  # where DEBUG is most verbose
+  level: INFO
+  # Configure logging to a file
+  file_logging:
+    # Whether logging to a file is enabled
+    enabled: false
+    # The path to the file to log to. May be relative or absolute
+    filepath: bot.log
+  # Configure logging to the console output
+  console_logging:
+    # Whether logging to the console is enabled
+    enabled: true
