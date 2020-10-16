@@ -1,0 +1,49 @@
+#!/bin/bash
+
+if [ -n "$CONFIG" ]; then
+	echo '^flow$|^s2f|^flow .*$|^s2f .$|^s-to-f$|^stock-to-flow .*$'
+	exit 0
+fi
+
+TORIFY="torify"
+
+# tor and torify should be installed for your privacy.
+type torify >/dev/null 2>&1 || {
+	echo "It is recommended that you install the packge \"tor\" on the server for privacy."
+	TORIFY=""
+}
+
+arg1=$(echo "$1" | tr -s ' ' | cut -s -d ' ' -f 2) # optional format like "+" or "more"
+
+if [[ "$arg1" == "+" ]] || [[ "$arg1" == "more" ]] || [[ "$arg1" == "plus" ]] || [[ "$arg1" == "v" ]]; then
+	FORMAT=""
+else
+	FORMAT="--terse"
+fi
+
+# s2f must be installed
+type s2f.py >/dev/null 2>&1 || {
+        # it was not found in normal path, lets see if we can  amplify the PATH by sourcing profile files
+        . $HOME/.bash_profile 2> /dev/null
+        . $HOME/.profile 2> /dev/null
+        type s2f.py >/dev/null 2>&1 || {
+	        echo "For s2f to work you must first install the file \"s2f.py\" on the server."
+	        echo "Download from https://github.com/8go/bitcoin-stock-to-flow"
+	        echo "Set your PATH if you have installed it but it cannot be found."
+                exit 0
+        }
+}
+
+# does not work over TOR $TORIFY 
+# mys2f.py $FORMAT | grep -v "Calculated" | grep -v "Data sources" | tr -s " " # this displays nicer with format "text"
+
+mys2f.py $FORMAT | grep -v "Calculated" | grep -v "Data sources" # this displays nicer with format "code"
+
+#if [ -n "$__reply" ]
+#then
+#    echo "$__reply"
+#else
+#    echo 'P O N G'
+#fi
+
+# EOF

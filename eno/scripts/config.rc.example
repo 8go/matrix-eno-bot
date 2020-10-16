@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# If desired, fill out the fields and rename file to "config.rc".
+# File must be located in same directory as Eno bash scripts.
+# Using this file is optional. It helps you separate some
+# private values from the rest of the bash scripts for better security.
+
+###############################################################################
+# CONFIG FILE FOR PRIVATE RESOURCES THAT NEED TO BE PROTECTED
+# DO NOT PUBLISH THIS FILE
+###############################################################################
+
+# START-SECRET ==============================================================
+export RESTART_DEFAULT_PASSWD_HASH="hash-of-your-password"
+# END-SECRET   ==============================================================
+export TIDES_DEFAULT_CITY1="SomeCity"
+export TIDES_DEFAULT_CITY2="SomeCityShortName"
+export TIDES_DEFAULT_CITY3="SomeCityLongName"
+export WAVES_DEFAULT_CITY1="SomeCity-Surf-Report/SomeNumber/" # see MagicSeaWeed.com
+export WAVES_DEFAULT_CITY2="SomeCityShortName"
+export WAVES_DEFAULT_CITY3="SomeCityLongName"
+export WEATHER_DEFAULT_CITY1="SomeCityId" # see ansiweather
+export WEATHER_DEFAULT_CITY2="SomeCityShortName"
+export WEATHER_DEFAULT_CITY3="SomeCityLongName"
+# START-SECRET ==============================================================
+export USERS_MYACCESSTOKENWITHADMINPERMISSIONS="some-very-long-access-token-from-Matrix-account-with-admin-permissions"
+export USERS_MYHOMESERVER="https://matrix.example.com"
+# END-SECRET   ==============================================================
+# START-SECRET ==============================================================
+export WAKE_PASSWD_HASH="hash-of-some-password"
+export WAKE_MAC1="So:me:Ma:cA:dd:re"
+export WAKE_NICK1A="SomeHostnameShort"
+export WAKE_NICK1B="SomeHostnameLong"
+# END-SECRET   ==============================================================
