@@ -1,5 +1,7 @@
 TODO: This bot is not ready yet. Please come back in 1-2 weeks! Thank you!
 
+![matrix-eno-bot icon](eno/logos/eno-logo.svg)
+
 # matrix-eno-bot
 
 ![matrix-eno-bot icon](https://upload.wikimedia.org/wikipedia/commons/3/37/Nsibidi.png)
@@ -9,7 +11,7 @@ TODO: This bot is not ready yet. Please come back in 1-2 weeks! Thank you!
 ## Naming: Eno?
 Why `eno`? It is a word play. Yes, another word play. `Matrix` is a word play on the [Matrix movies](https://en.wikipedia.org/wiki/The_Matrix_(franchise)). `matrix-nio` one would guess is a word play on the character [Neo](https://en.wikipedia.org/wiki/Neo_(The_Matrix)), in the Matrix movies. Both `Neo` and `nio` sound the same. They are [homophones](https://en.wikipedia.org/wiki/Homophone). And `eno` is just a randomized version of `Neo`, an [anagram](https://en.wikipedia.org/wiki/Anagram) of Neo.
 
-Eno is also another name for the [Ibibio tribe](https://en.wikipedia.org/wiki/Ibibio_people) in Nigeria. Hence, the "logo" which is nothing more than 3 Nsibidi symbols taken from [Wikipedia](https://en.wikipedia.org/wiki/Ibibio_people). 
+Eno is also another name for the [Ibibio tribe](https://en.wikipedia.org/wiki/Ibibio_people) in Nigeria. Hence, the "logo" which is nothing more than an Nsibidi symbols taken from [Wikipedia](https://en.wikipedia.org/wiki/Ibibio_people). To me this Nsibidi symbol chosen as the logo resembles a stylized `E`. `E` of course for `eno`.
 
 And a month after creating this repo by pure chance, this [Urban Dictionary link](https://www.urbandictionary.com/define.php?term=Eno) for `eno` popped up. Here, the word `eno` is defined as: _Totally awesome, Wicked cool. Hyperbole of awesome/cool. E.g. Dude, that round of speedball was so eno!_ What a fitting coincidence! Perfect fit! So cool, oops, so eno!
 
