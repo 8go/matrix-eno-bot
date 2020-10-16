@@ -1,0 +1,40 @@
+# This is the systemd service file for the matrix-eno-bot
+# It helps you to run the bot as a system service
+
+# Installation of matrix-eno-bot as service:
+# cp matrix-eno-bot.service.original matrix-eno-bot.service
+# Modify/Configure the matrix-eno-bot.service to fit your needs
+# nano matrix-eno-bot.service
+# Copy your service file to system directory
+# sudo cp matrix-eno-bot.service /etc/systemd/system/
+# Enable it to create it:
+# sudo systemctl enable matrix-eno-bot
+# Start it:
+# sudo systemctl start matrix-eno-bot
+# Get status:
+# sudo systemctl status matrix-eno-bot
+# Restarting/reseting it:
+# sudo systemctl restart matrix-eno-bot
+# Stop it:
+# sudo systemctl stop matrix-eno-bot
+# To uninstall it:
+# sudo systemctl disable matrix-eno-bot
+
+[Unit]
+Description=matrix-eno-bot
+
+[Service]
+# change user name to fit your needs
+User=matrix-neo-bot
+Group=users
+Environment=PYTHONUNBUFFERED=1
+# change this PATH to fit your needs
+Environment=PATH=/home/matrix-eno-bot/matrix-eno-bot/eno/scripts:/home/matrix-eno-bot/bin:/home/matrix-eno-bot/.local/bin:/home/matrix-eno-bot/Scripts:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+# change this PATH to fit your PATH
+ExecStart=/home/matrix-eno-bot/matrix-eno-bot/main.py /home/matrix-eno-bot/matrix-eno-bot/config.yaml
+ExecStop=/bin/kill -9 $MAINPID
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
