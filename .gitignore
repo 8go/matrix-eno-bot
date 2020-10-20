@@ -9,14 +9,17 @@ env3/
 # Bot local files
 *.db
 
-# Config file
-config.yaml
-
 # Python
 __pycache__/
+eno/scripts/__pycache__/
 
 # Config file
 config.yaml
+eno/matrix-eno-bot.service
+eno/scripts/config.rc
+
+# e2ee store
+store/
 
 # Log files
 *.log
