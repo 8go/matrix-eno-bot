@@ -12,7 +12,7 @@ Eno is also another name for the [Ibibio tribe](https://en.wikipedia.org/wiki/Ib
 
 ![matrix-eno-bot icon](eno/logos/Nsibidi-small.png)
 
-Hence, the "logo" which is nothing more than an Nsibidi symbols taken from [Wikipedia](https://en.wikipedia.org/wiki/Ibibio_people). To me the Nsibidi symbol chosen for the logo resembles a stylized `E`. `E` of course for `eno`.
+Hence, the "logo" which is nothing more than an Nsibidi symbol taken from [Wikipedia](https://en.wikipedia.org/wiki/Ibibio_people). To me the Nsibidi symbol chosen for the logo resembles a stylized `E`. `E` of course for `eno`.
 
 And a month after creating this repo by pure chance, this [Urban Dictionary link](https://www.urbandictionary.com/define.php?term=Eno) for `eno` popped up. Here, the word `eno` is defined as: _Totally awesome, Wicked cool. Hyperbole of awesome/cool. E.g. Dude, that round of speedball was so eno!_ What a fitting coincidence! Perfect fit! So cool, oops, so eno!
 
