@@ -1,6 +1,3 @@
-TODO: This bot is ready and complete. It is running for me for months without problems. 
-However, this README.md file has not yet been updated. Please come back in 1-2 weeks to get the updated documentation in this README.md. Thanks. Meanwhile, enjoy the software.
-
 ![matrix-eno-bot icon](eno/logos/eno-logo.svg)
 
 # matrix-eno-bot
@@ -8,6 +5,7 @@ However, this README.md file has not yet been updated. Please come back in 1-2 w
 `matrix-eno-bot` is a [Matrix](https://matrix.org) bot based on the Python 3 bot template [nio-template](https://github.com/8go/nio-template) which in turn is based on the Matrix Python SDK called [matrix-nio](https://github.com/poljar/matrix-nio). The bot, the template and the SDK are all written in Python 3. The commands that the `matrix-eno-bot` comes with are written in `bash` and in `python3`.
 
 ## Naming: Eno?
+
 Why `eno`? It is a word play. Yes, another word play. `Matrix` is a word play on the [Matrix movies](https://en.wikipedia.org/wiki/The_Matrix_(franchise)). `matrix-nio` one would guess is a word play on the character [Neo](https://en.wikipedia.org/wiki/Neo_(The_Matrix)), in the Matrix movies. Both `Neo` and `nio` sound the same. They are [homophones](https://en.wikipedia.org/wiki/Homophone). And `eno` is just a randomized version of `Neo`, an [anagram](https://en.wikipedia.org/wiki/Anagram) of Neo.
 
 Eno is also another name for the [Ibibio tribe](https://en.wikipedia.org/wiki/Ibibio_people) in Nigeria. Have a look at their unusual symbols.
@@ -20,30 +18,54 @@ And a month after creating this repo by pure chance, this [Urban Dictionary link
 
 ## History and Past
 
-The first version of the bot was [tiny-matrix-bot plus](https://github.com/8go/tiny-matrix-bot) which was based on [matrix-python-sdk](https://github.com/matrix-org/matrix-python-sdk). Since `matrix-python-sdk` is no longer actively supported and end-to-end-encryption comes out of the box in `matrix-nio`, the switch to `nio-template` was made. 
+The first version of the bot was [tiny-matrix-bot plus](https://github.com/8go/tiny-matrix-bot) which was based on [matrix-python-sdk](https://github.com/matrix-org/matrix-python-sdk). Since `matrix-python-sdk` is no longer actively supported and end-to-end-encryption comes out of the box in `matrix-nio`, the switch to `nio-template` was made. [tiny-matrix-bot plus](https://github.com/8go/tiny-matrix-bot) is now abandonded and all efforts are put into `matrix-eno-bot`.
+
+Due to this history, you will find strong similarieties in the Bash scripts in [tiny-matrix-bot plus](https://github.com/8go/tiny-matrix-bot) and `eno`. 
+
+`eno` includes various modifications and enhancements in comparison to [nio-template](https://github.com/8go/nio-template). `nio-template` was forked in summer of 2020. Since then my fork has drifted apart from the original `nio-template`. The framework files of `nio-template` used by `eno` have these enhancements:
+
+- use of access token instead of password
+- option to trust own devices
+- option to change device name
+- emoji verification and handling of `to_device` messages
+- sending of images and files (audio, video, pdf, etc.)
+
 
 ## Installation and Setup
 
-TODO: This needs to be re-written. Not correct currently.
+```
+# install dependencies, matrix-nio
+# for more detail see https://github.com/poljar/matrix-nio
+sudo apt install python3 python3-requests libolm-dev
+pip install "matrix-nio[e2e]" Markdown PyYAML
+# install matrix-eno-bot
+git clone https://github.com/8go/matrix-eno-bot
+# https://github.com/8go/matrix-eno-bot includes the nio-template files.
+# no need to clone nio-template repo
+cd matrix-eno-bot
+# configure bot
+cp config.yaml.example config.yaml
+vim config.yaml # adjust the config file to your needs
+# configure bot as service
+cd eno
+cp matrix-eno-bot.service.example matrix-eno-bot.service
+vim matrix-eno-bot.service # adjust service to your setup
+sudo cp matrix-eno-bot.service /etc/systemd/system/matrix-eno-bot.service
+# read the comments in matrix-eno-bot.service, it tells you what to do
+systemctl enable matrix-eno-bot # create bot service
+systemctl start matrix-eno-bot # start bot
+systemctl stop matrix-eno-bot # stop bot
+```
 
-```
-sudo apt install python3 python3-requests
-git clone https://github.com/8go/tiny-matrix-bot
-git clone https://github.com/matrix-org/matrix-python-sdk
-cd tiny-matrix-bot
-ln -s ../matrix-python-sdk/matrix_client
-cp tiny-matrix-bot.cfg.sample tiny-matrix-bot.cfg
-vim tiny-matrix-bot.cfg # adjust the config file, add token, etc.
-cp tiny-matrix-bot.service /etc/systemd/system
-vim /etc/systemd/system/tiny-matrix-bot.service # adjust service to your setup
-systemctl enable tiny-matrix-bot
-systemctl start tiny-matrix-bot
-systemctl stop tiny-matrix-bot
-```
+Other hints:
+- Create an account for your bot in some client, e.g. in Element
+- Use this account (username, password) in `config.yaml` and let the bot create a `brand-new` device
+  - If device is not new e2ee will not work.
+- Verify the bot via emoji-verify
+- If desired reconfigure `config.yaml` to replace password with access token for added security
+
 
 ## Usage
-
-TODO: This needs to be revised.
 
 - intended audience/users: 
   - small homeserver set up for a few friends
@@ -52,74 +74,71 @@ TODO: This needs to be revised.
 - create a Matrix account for the bot, name it `bot` for example
 - configure the bot software
 - create the bot service and start the bot or the bot service
-- log in to the before created Matrix `bot` account e.g. via Riot web page
+- log in to the before created Matrix `bot` account e.g. via Element web page
 - manually send invite from `bot` account to a friend (or to yourself)
 - once invite is accepted, reset the bot service (so that the new room will be added to bot service)
   - if you as admin already have a room with the bot, you can reset the bot by sending it `restart bot` as a message in your Matrix bot room
 - have the newly joined invitee send a `hello` command to the bot for a first test
+- bot can do emoji verify
 - bot can handle encrypted rooms by default
+- bot can handle texts, images, and arbitrary files (send audio, PDF, video, etc.)
 
 ## Debugging
 
-TODO: This needs to be revised. Not correct at the moment.
-
 Run something similar to
 ```
-systemctl stop tiny-matrix-bot # stop server in case it is running
-cd tiny-matrix-bot # go to your installation directory
-./tiny-matrix-bot.py --debug # observe debug output
+cd matrix-eno-bot # go to your installation directory
+vim config.yaml # modify the logging parameters, increase logging
+systemctl restart matrix-eno-bot # restart server in case it is running
+# observe debug output and look at the log files
 ```
 
 ## Bot as Personal Assistant: Example bot commands provided
 
-- help: to list available bot commands
-- ping: trivial example to have the bot respond
-- pong: like ping, but pong
-- hello: gives you a friendly compliment
-- motd: gives you the Linux Message Of The Day
+Commands useful to average users:
+
+- btc: gives Bitcoin BTC price info
 - ddg: search the web with DuckDuckGo search
-- web: surf the web, get a web page (JavaScript not supported)
-- tides: get today's low and high tides of your favorite beach
-- weather: get the weather forecast for your favorite city
-- rss: read RSS feeds
-- twitter: read latest user tweets from Twitter (does not always work as info is scraped from web)
-- tesla: chat with your Tesla car (dummy)
-- totp: get 2FA Two-factor-authentication TOTP PIN via bot message
+- eth: gives Ethereum price info
+- hello: gives you a friendly compliment
+- help: to list available bot commands
 - hn: read Hacker News, fetches front page headlines from Hacker News
 - mn: read Messari News, fetches the latest news articles from Messari
-- date: gives date and time
-- btc: gives Bitcoin BTC price info
-- eth: gives Ethereum price info
+- motd: gives you the Linux Message Of The Day
+- rss: read RSS feeds
 - s2f: print Bitcoin Stock-to-flow price info
+- tides: get today's low and high tides of your favorite beach
+- totp: get 2FA Two-factor-authentication TOTP One-Time-Password PIN via bot message (like Google Authenticator)
+- twitter: read latest user tweets from Twitter (does **not** work most of the time as info is scraped from web)
+- waves: get the surf report of your favorite beach
+- weather: get the weather forecast for your favorite city
+- web: surf the web, get a web page (JavaScript not supported)
 
 ## Bot as Admin Tool: Example bot commands provided to Matrix or system administrators
 
 With these commands a system administrator can maintain his Matrix installation and keep a watchful eye on his server all through the Matrix bot. Set the permissions accordingly in the config file to avoid unauthorized use of these bot commands!
 
-- disks: see how full your disks or mountpoints are
-- cputemp: monitor the CPU temperatures
-- restart: restart the bot itself, or Matrix services
+- alert: shows if any CPU, RAM, or Disk thresholds have been exceeded (best to combine with a cron job, and have the cron job send the bot message to Matrix admin rooms)
+- backup: runs your backup script to backup files, partitions, etc.
 - check: check status, health status, updates, etc. of bot, Matrix and the operating system
-- update: update operating sytem
-- wake: wake up other PCs on the network via wake-on-LAN
-- firewall: list the firewall settings and configuration
+- cputemp: monitor the CPU temperatures
 - date: gives date and time of server
+- disks: see how full your disks or mountpoints are
+- firewall: list the firewall settings and configuration
 - platform: gives hardware and operating system platform information
 - ps: print current CPU, RAM and Disk utilization of server
+- restart: restart the bot itself, or Matrix services
 - top: gives 5 top CPU and RAM consuming processes
-- alert: shows if any CPU, RAM, or Disk thresholds have been exceeded (best to combine with a cron job, and have the cron job send the bot message to Matrix admin rooms)
+- update: update operating sytem and other software environments
+- users: list user accounts that exist on your server
+- wake: wake up other PCs on the network via wake-on-LAN
+
 
 ## Other Features
 
-TODO: This needs to be revised. Not correct currently. 
-
-- bot can also be used as an CLI app to send messages to rooms where bot is a member
-- when sending messages, 3 message formats are supported:
-  - text: by default
-  - html: like using `/html ...` in a chat
-  - code: for sending code snippets or script outputs, like `/html <pre><code> ... </code></pre>`
-- sample scripts are in `bash` and in `python3`
-- it can be used very easily for monitoring the system. An admin can set up a cron job that runs every 15 minutes, e.g. to check CPU temperature, or to check a log file for signs of an intrusion (e.g. SSH or Web Server log files). If anything abnormal is found by the cron job, the cron job fires off a bot message to the admin. 
+- sample scripts are in `bash` and in `python3`, but can be in any language (JavaScript, Go, etc.)
+- matrix-eno-bot combines well with [matrix-commander](https://github.com/8go/matrix-commander). Configure `matrix-commander` as another eno bot device.
+- `matrix-commander` can then be used very easily for monitoring the system. An admin can set up a cron job that runs every 15 minutes, e.g. to check CPU temperature, or to check a log file for signs of an intrusion (e.g. SSH or Web Server log files). If anything abnormal is found by the cron job, the cron job fires off a bot message to the admin. 
 
 ## Legal
 
@@ -138,33 +157,16 @@ There is no support and no warranty.
 ---
 
 
+# More on the Nio Template
 
 
-
-
-
-# Nio Template
-
-A template for creating bots with
+The [nio-template](https://github.com/anoadragon453/nio-template) is a template for creating bots with
 [matrix-nio](https://github.com/poljar/matrix-nio). The documentation for
 matrix-nio can be found
 [here](https://matrix-nio.readthedocs.io/en/latest/nio.html).
 
-## Projects using nio-template
-
-* [anoadragon453/msc-chatbot](https://github.com/anoadragon453/msc-chatbot) - A matrix bot for matrix spec proposals
-* [anoadragon453/matrix-episode-bot](https://github.com/anoadragon453/matrix-episode-bot) - A matrix bot to post episode links
-* [TheForcer/vision-nio](https://github.com/TheForcer/vision-nio) - A general purpose matrix chatbot
-* [anoadragon453/matrix-reminder-bot](https://github.com/anoadragon453/matrix-reminder-bot
-) - A matrix bot to remind you about things
-* [anoadragon453/drawing-challenge-bot](https://github.com/anoadragon453/drawing-challenge-bot) - A matrix bot to
-post historical, weekly art challenges from reddit to a room
-* [alturiak/nio-smith](https://github.com/alturiak/nio-smith) - A modular bot for @matrix-org that can be dynamically
-extended by plugins
-
-
-Want your project listed here? [Edit this
-doc!](https://github.com/anoadragon453/nio-template/edit/master/README.md)
+For up-to-date info on `nio-template` go to https://github.com/anoadragon453/nio-template. 
+Give them a star if you like it.
 
 ## Project structure
 
@@ -185,6 +187,9 @@ on the `AsyncClient.sync` method), the homeserver will only return new event
 
 This token is saved and provided again automatically by using the
 `client.sync_forever(...)` method.
+
+_It can also change its device name and it can trust its own devices, 
+if so configured._
 
 ### `config.py`
 
@@ -219,6 +224,9 @@ process that command.
 The invite callback function, `invite`, processes the invite event and attempts
 to join the room. This way, the bot will auto-join any room it is invited to.
 
+_The device callback function, `device`, handles all aspects of an emoji 
+verification._ 
+
 ### `bot_commands.py`
 
 Where all the bot's commands are defined. New commands should be defined in
@@ -249,19 +257,18 @@ A separate file to hold helper methods related to messaging. Mostly just for
 organisational purposes. Currently just holds `send_text_to_room`, a helper
 method for sending formatted messages to a room.
 
+_Other helper functions allow sending of images and arbitrary files like
+audio, video, PDFs, etc._
+
 ### `errors.py`
 
 Custom error types for the bot. Currently there's only one special type that's
 defined for when a error is found while the config file is being processed.
 
-### `sample.config.yaml`
+### `config.yaml.example`
 
 The sample configuration file. People running your bot should be advised to
 copy this file to `config.yaml`, then edit it according to their needs. Be sure
 never to check the edited `config.yaml` into source control since it'll likely
 contain sensitive details like passwords!
 
-## Questions?
-
-Any questions? Ask in
-[#nio-template:amorgan.xyz](https://matrix.to/#/!vmWBOsOkoOtVHMzZgN:amorgan.xyz?via=amorgan.xyz)!
