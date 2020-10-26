@@ -25,7 +25,7 @@ if [ "$#" == "1" ] || [ "$#" == "2" ]; then
     'y' | 'yesterday')
         ydate=$(date +%F --date='yesterday')
         [ "$DEBUG" == "true" ] && echo "Getting yesterday's news for day \"$ydate\"."
-        arg1=$1
+        arg1='yesterday'
         ;;
     202[0-9]-[0-1][0-9]-[0-3][0-9])
         ydate=$1
@@ -64,9 +64,9 @@ if [ $# -gt 2 ]; then
 fi
 
 function dojson() {
-    [ "$DEBUG" == "true" ] && echo "DEBUG: You requested ${arg1,,} news article"
+    [ "$DEBUG" == "true" ] && echo "DEBUG: You requested \"${arg1,,}\" news article"
     case "${arg1,,}" in
-    'yesterday')
+    'y' | 'yesterday')
         x=0
         while :; do
             mndate=$(echo "$mnjson" | jq ".data[$x].published_at")
@@ -156,7 +156,7 @@ function dojson() {
 # https://messari.io/api/docs#tag/News
 mnjson=$($TORIFY curl --silent --compressed "https://data.messari.io/api/v1/news?fields=title,content,url,published_at&as-markdown&page=1")
 # TESTDATA # mnjson="<html><title>500 Service Error</title><h1>500 Service Error</h1></html>"
-[ "$DEBUG" == "true" ] && echo -e "DEBUG: REST query returned this data: \n$mnjson\n"
+[ "$DEBUG" == "true" ] && echo -e "DEBUG: REST query returned this data (first 256 bytes): \n${mnjson:0:255}\n"
 firstline=$(echo "$mnjson" | head -n 1)
 if [[ "${firstline,,}" =~ \<html\>.* ]]; then
     echo "There was a problem. Messari did not return a JSON object but an HTML page."
