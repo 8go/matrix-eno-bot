@@ -582,6 +582,20 @@ class Command(object):
                 formatted=True,
                 code=False,
             )
+            if self.command_dict.is_not_empty():
+                command_dict_help = "Commands from command dictionary:\n"
+                for icom in self.command_dict:
+                    command_dict_help += f"\n- {icom}: {self.command_dict.get_help(icom)}"
+                await send_text_to_room(
+                    self.client,
+                    self.room.room_id,
+                    command_dict_help,
+                    markdown_convert=True,
+                    formatted=True,
+                    code=False,
+                    split=None,
+                )
+
             return
         else:
             response = f"Unknown help topic `{topic}`!"

@@ -43,6 +43,15 @@ class CommandDict:
     def __getitem__(self, item):
         return self.commands[item]
 
+    def __iter__(self):
+        return self.commands.__iter__()
+
+    def is_not_empty(self):
+        """Returns whether there are commands in the dictionary.
+
+        """
+        return len(self.commands) > 0
+
     def get_cmd(self, command):
         """Return the name of the executable associated with the given command,
         for the system to call.
@@ -62,5 +71,8 @@ class CommandDict:
             command (str): Name of the command in the command dictionary
 
         """
-        return self.commands[command]["help"]
+        if "help" in self.commands[command]:
+            return self.commands[command]["help"]
+        else:
+            return "No help defined for this command."
 
