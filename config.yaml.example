@@ -55,6 +55,8 @@ storage:
   # The path to a directory for internal bot storage
   # containing encryption keys, sync tokens, etc.
   store_filepath: "./store"
+  # The path to the command dictionary configuration file
+  # command_dict_filepath: "./commands.yaml"
 
 # Logging setup
 logging:

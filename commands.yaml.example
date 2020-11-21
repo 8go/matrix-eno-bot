@@ -1,0 +1,29 @@
+# This is an example command dictionary configuration. Mind you, this is an
+# example script meant to convey the structure of this configuration, it will
+# probably not work as is on your terminal.
+
+# Paths that will be added to the runtime PATH variable. Add any paths of
+# executables called from your custom commands, the paths of which are not 
+# yet in the environment PATH variable.
+paths:
+    - /home/YOURUSER/.local/lib/matrix-eno-bot/eno/scripts
+    - /home/YOURUSER/.local/etc/matrix-eno-bot/bin
+ 
+# Definitions of custom commands.
+# The children of the "commands" key are the command names. These are the
+# commands that you want to add to your bot, and which you will invoke by name.
+# They in turn may have the following keys:
+#   cmd:  the executable, which the system will attempt to call and pass
+#         arguments to
+#   help: the help string for when you forget how use the command
+commands:
+    sshstart:
+      cmd: ssh_start
+      help: "Open SSH port, return external IP"
+    sshstop:
+      cmd: ssh_stop
+      help: "Close SSH port"
+    getip:
+      cmd: getextip
+      help: "Return external IP"
+
