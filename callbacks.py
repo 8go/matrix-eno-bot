@@ -31,6 +31,7 @@ from nio import (
 )
 import logging
 import traceback
+from command_dict import CommandDict
 
 logger = logging.getLogger(__name__)
 
@@ -47,10 +48,12 @@ class Callbacks(object):
             store (Storage): Bot storage
             config (Config): Bot configuration parameters
 
+
         """
         self.client = client
         self.store = store
         self.config = config
+        self.command_dict = CommandDict(config.command_dict_filepath)
         self.command_prefix = config.command_prefix
 
     async def message(self, room, event):
@@ -95,7 +98,7 @@ class Callbacks(object):
             msg = msg[len(self.command_prefix):]
 
         command = Command(self.client, self.store,
-                          self.config, msg, room, event)
+                          self.config, self.command_dict, msg, room, event)
         await command.process()
 
     async def invite(self, room, event):

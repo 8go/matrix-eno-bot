@@ -33,7 +33,7 @@ SERVER_ERROR_MSG = "Bot encountered an error. Here is the stack trace: \n"
 class Command(object):
     """Use this class for your bot commands."""
 
-    def __init__(self, client, store, config, command, room, event):
+    def __init__(self, client, store, config, command_dict, command, room, event):
         """Set up bot commands.
 
         Arguments:
@@ -41,6 +41,7 @@ class Command(object):
             client (nio.AsyncClient): The client to communicate with Matrix
             store (Storage): Bot storage
             config (Config): Bot configuration parameters
+            command_dict (CommandDict): Command dictionary
             command (str): The command and arguments
             room (nio.rooms.MatrixRoom): The room the command was sent in
             event (nio.events.room_events.RoomMessageText): The event
@@ -50,6 +51,7 @@ class Command(object):
         self.client = client
         self.store = store
         self.config = config
+        self.command_dict = command_dict
         self.command = command
         self.room = room
         self.event = event
@@ -524,6 +526,15 @@ class Command(object):
                 formatted=True,
                 code=False,
             )
+        # command from command dict
+        elif self.commandlower in self.command_dict:
+            await self._os_cmd(
+                cmd=self.command_dict.get_cmd(self.commandlower),
+                args=self.args,
+                markdown_convert=False,
+                formatted=True,
+                code=True,
+            )
         else:
             await self._unknown_command()
 
@@ -571,6 +582,20 @@ class Command(object):
                 formatted=True,
                 code=False,
             )
+            if self.command_dict.is_not_empty():
+                command_dict_help = "Commands from command dictionary:\n"
+                for icom in self.command_dict:
+                    command_dict_help += f"\n- {icom}: {self.command_dict.get_help(icom)}"
+                await send_text_to_room(
+                    self.client,
+                    self.room.room_id,
+                    command_dict_help,
+                    markdown_convert=True,
+                    formatted=True,
+                    code=False,
+                    split=None,
+                )
+
             return
         else:
             response = f"Unknown help topic `{topic}`!"
