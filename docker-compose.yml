@@ -8,6 +8,7 @@ services:
     restart: always
     volumes:
       - ${PWD}/config.yaml:/bot/config.yaml
+      - ${PWD}/commands.yaml:/bot/commands.yaml
       - ${PWD}/bot.db:/bot/bot.db
       - ${PWD}/store/:/bot/store/
     stop_signal: SIGINT
