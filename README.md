@@ -69,12 +69,16 @@ Other hints:
 - Verify the bot via emoji-verify
 - If desired reconfigure `config.yaml` to replace password with access token for added security
 
-## Installation dockerized
+## Installation as Docker Container
 
-Since a couple of Python packages require to be compiled, you might want to not install `gcc` on your server. An alternate way to quickly deploy the bot is to compile it in a docker container and then install the Docker container.
+Since a couple of Python packages require to be compiled, you might want to not 
+install `gcc` on your server. An alternate way to quickly deploy the bot is to compile 
+it in a docker container and then install the Docker container.
 
-To build the Docker image (~500mb): `docker build -t matrix-eno-bot --rm .`
-To run the container: `docker run --rm -ti matrix-eno-bot bash`
+- To build the Docker image (~500mb): `docker build -t matrix-eno-bot --rm .`
+- To run the container: `docker run --rm -ti matrix-eno-bot bash`
+
+Thanks to @apiraino for this contribution!
 
 ## Usage
 
