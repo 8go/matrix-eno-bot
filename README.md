@@ -43,9 +43,14 @@ git clone https://github.com/8go/matrix-eno-bot
 # https://github.com/8go/matrix-eno-bot includes the nio-template files.
 # no need to clone nio-template repo
 cd matrix-eno-bot
-# configure bot
+# configure bot basics
 cp config.yaml.example config.yaml
 vim config.yaml # adjust the config file to your needs
+# configure bot command dictionary (thanks to @wolterhv)
+cp commands.yaml.example commands.yaml
+vim commands.yaml # adjust the commands config file to your needs
+# make scripts executable
+chmod 755 eno/scripts/*
 # configure bot as service
 cd eno
 cp matrix-eno-bot.service.example matrix-eno-bot.service
@@ -83,6 +88,11 @@ Other hints:
 - bot can handle encrypted rooms by default
 - bot can handle texts, images, and arbitrary files (send audio, PDF, video, etc.)
 
+## Feedback
+
+- If you like the `matrix-eno-bot` please give it a :star: on Github right away. 
+  Thanks :heart: Raise issues or contribute a PR.
+
 ## Debugging
 
 Run something similar to
@@ -114,6 +124,8 @@ Commands useful to average users:
 - weather: get the weather forecast for your favorite city
 - web: surf the web, get a web page (JavaScript not supported)
 
+- easily extendable via command dictionary in convenient commands.yaml file
+ 
 ## Bot as Admin Tool: Example bot commands provided to Matrix or system administrators
 
 With these commands a system administrator can maintain his Matrix installation and keep a watchful eye on his server all through the Matrix bot. Set the permissions accordingly in the config file to avoid unauthorized use of these bot commands!
@@ -133,10 +145,13 @@ With these commands a system administrator can maintain his Matrix installation 
 - users: list user accounts that exist on your server
 - wake: wake up other PCs on the network via wake-on-LAN
 
+- easily extendable via command dictionary in convenient commands.yaml file
+
 
 ## Other Features
 
 - sample scripts are in `bash` and in `python3`, but can be in any language (JavaScript, Go, etc.)
+- easily extendable via command dictionary in convenient commands.yaml file (thanks to @wolterhv)
 - matrix-eno-bot combines well with [matrix-commander](https://github.com/8go/matrix-commander). Configure `matrix-commander` as another eno bot device.
 - `matrix-commander` can then be used very easily for monitoring the system. An admin can set up a cron job that runs every 15 minutes, e.g. to check CPU temperature, or to check a log file for signs of an intrusion (e.g. SSH or Web Server log files). If anything abnormal is found by the cron job, the cron job fires off a bot message to the admin. 
 
@@ -146,6 +161,7 @@ There is no support and no warranty.
 
 ## Final Thoughts
 
+- Thanks a lot to the people that have already contributed! It is so appreciated! :heart:
 - Enjoy and have fun with it, it is cool, and easily extensible. Adjust it to your needs!
 - Pull Requests are welcome :)
 
