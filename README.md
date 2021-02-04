@@ -20,7 +20,7 @@ And a month after creating this repo by pure chance, this [Urban Dictionary link
 
 The first version of the bot was [tiny-matrix-bot plus](https://github.com/8go/tiny-matrix-bot) which was based on [matrix-python-sdk](https://github.com/matrix-org/matrix-python-sdk). Since `matrix-python-sdk` is no longer actively supported and end-to-end-encryption comes out of the box in `matrix-nio`, the switch to `nio-template` was made. [tiny-matrix-bot plus](https://github.com/8go/tiny-matrix-bot) is now abandonded and all efforts are put into `matrix-eno-bot`.
 
-Due to this history, you will find strong similarieties in the Bash scripts in [tiny-matrix-bot plus](https://github.com/8go/tiny-matrix-bot) and `eno`. 
+Due to this history, you will find strong similarieties in the Bash scripts in [tiny-matrix-bot plus](https://github.com/8go/tiny-matrix-bot) and `eno`.
 
 `eno` includes various modifications and enhancements in comparison to [nio-template](https://github.com/8go/nio-template). `nio-template` was forked in summer of 2020. Since then my fork has drifted apart from the original `nio-template`. The framework files of `nio-template` used by `eno` have these enhancements:
 
@@ -69,10 +69,16 @@ Other hints:
 - Verify the bot via emoji-verify
 - If desired reconfigure `config.yaml` to replace password with access token for added security
 
+## Installation dockerized
+
+Since a couple of Python packages require to be compiled, you might want to not install `gcc` on your server. An alternate way to quickly deploy the bot is to compile it in a docker container and then install the Docker container.
+
+To build the Docker image (~500mb): `docker build -t matrix-eno-bot --rm .`
+To run the container: `docker run --rm -ti matrix-eno-bot bash`
 
 ## Usage
 
-- intended audience/users: 
+- intended audience/users:
   - small homeserver set up for a few friends
   - tinkerers who want to learn how a bot works
   - people who want to play around with Python code and Matrix
@@ -153,11 +159,11 @@ With these commands a system administrator can maintain his Matrix installation 
 - sample scripts are in `bash` and in `python3`, but can be in any language (JavaScript, Go, etc.)
 - easily extendable via command dictionary in convenient commands.yaml file (thanks to @wolterhv)
 - matrix-eno-bot combines well with [matrix-commander](https://github.com/8go/matrix-commander). Configure `matrix-commander` as another eno bot device.
-- `matrix-commander` can then be used very easily for monitoring the system. An admin can set up a cron job that runs every 15 minutes, e.g. to check CPU temperature, or to check a log file for signs of an intrusion (e.g. SSH or Web Server log files). If anything abnormal is found by the cron job, the cron job fires off a bot message to the admin. 
+- `matrix-commander` can then be used very easily for monitoring the system. An admin can set up a cron job that runs every 15 minutes, e.g. to check CPU temperature, or to check a log file for signs of an intrusion (e.g. SSH or Web Server log files). If anything abnormal is found by the cron job, the cron job fires off a bot message to the admin.
 
 ## Legal
 
-There is no support and no warranty. 
+There is no support and no warranty.
 
 ## Final Thoughts
 
@@ -181,7 +187,7 @@ The [nio-template](https://github.com/anoadragon453/nio-template) is a template 
 matrix-nio can be found
 [here](https://matrix-nio.readthedocs.io/en/latest/nio.html).
 
-For up-to-date info on `nio-template` go to https://github.com/anoadragon453/nio-template. 
+For up-to-date info on `nio-template` go to https://github.com/anoadragon453/nio-template.
 Give them a star if you like it.
 
 ## Project structure
@@ -204,7 +210,7 @@ on the `AsyncClient.sync` method), the homeserver will only return new event
 This token is saved and provided again automatically by using the
 `client.sync_forever(...)` method.
 
-_It can also change its device name and it can trust its own devices, 
+_It can also change its device name and it can trust its own devices,
 if so configured._
 
 ### `config.py`
@@ -240,8 +246,8 @@ process that command.
 The invite callback function, `invite`, processes the invite event and attempts
 to join the room. This way, the bot will auto-join any room it is invited to.
 
-_The device callback function, `device`, handles all aspects of an emoji 
-verification._ 
+_The device callback function, `device`, handles all aspects of an emoji
+verification._
 
 ### `bot_commands.py`
 
@@ -287,4 +293,3 @@ The sample configuration file. People running your bot should be advised to
 copy this file to `config.yaml`, then edit it according to their needs. Be sure
 never to check the edited `config.yaml` into source control since it'll likely
 contain sensitive details like passwords!
-

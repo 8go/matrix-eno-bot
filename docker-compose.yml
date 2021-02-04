@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  matrix-eno-bot:
+    container_name: matrix-eno-bot
+    image: 'matrix-eno-bot:latest'
+    build: '.'
+    restart: always
+    volumes:
+      - ${PWD}/config.yaml:/bot/config.yaml
+      - ${PWD}/bot.db:/bot/bot.db
+      - ${PWD}/store/:/bot/store/
+    stop_signal: SIGINT
