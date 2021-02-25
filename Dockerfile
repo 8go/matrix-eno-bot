@@ -9,7 +9,7 @@ RUN apt update && apt upgrade -y && \
 WORKDIR /bot
 
 COPY *.py /bot/
-COPY *.cfg /bot/
+COPY *.yaml /bot/
 COPY *.txt /bot/
 COPY eno /bot/eno/
 
