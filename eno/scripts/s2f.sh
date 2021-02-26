@@ -12,12 +12,19 @@ type torify >/dev/null 2>&1 || {
     TORPROXY=""
 }
 
-arg1=$(echo "$1" | tr -s ' ' | cut -s -d ' ' -f 2) # optional format like "+" or "more"
+arg1=$1
+arg2=$2
 
-if [[ "$arg1" == "+" ]] || [[ "$arg1" == "more" ]] || [[ "$arg1" == "plus" ]] || [[ "$arg1" == "v" ]]; then
+if [[ "$arg1" == "+" ]] || [[ "$arg1" == "more" ]] || [[ "$arg1" == "plus" ]] || [[ "$arg1" == "v" ]] || [[ "$arg2" == "+" ]] || [[ "$arg2" == "more" ]] || [[ "$arg2" == "plus" ]] || [[ "$arg2" == "v" ]]; then
     FORMAT=""
 else
     FORMAT="--terse"
+fi
+
+if [[ "${arg1,,}" == "notorify" ]] || [[ "${arg1,,}" == "notor" ]] || [[ "${arg2,,}" == "notorify" ]] || [[ "${arg2,,}" == "notor" ]]; then
+    # echo "Turning Tor use off."
+    TORIFY=""
+    TORPROXY=""
 fi
 
 # s2f must be installed
@@ -33,6 +40,6 @@ type s2f.py >/dev/null 2>&1 || {
     }
 }
 
-$TORIFY mys2f.py $TORPROXY $FORMAT | grep -v "Calculated" | grep -v "Data sources" # this displays nicer with format "code"
+$TORIFY s2f.py $TORPROXY $FORMAT | grep -v "Calculated" | grep -v "Data sources" # this displays nicer with format "code"
 
 # EOF
