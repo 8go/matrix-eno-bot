@@ -14,19 +14,37 @@ paths:
 # Definitions of bot commands.
 # The children of the "commands" key are the command names. These are the
 # commands that you want to add to your bot, and which you will invoke by name.
-# They in turn may have the following keys:
+# They in turn may have the following keys (or properties):
 #
-#   cmd:               name of the executable, which the system will attempt 
-#                      to call and pass arguments to
-#   help:              the help string for when you forget how use the command
+#   cmd:               name of the command or executable, which the bot
+#                      will attempt to call and pass arguments to.
+#   help:              help string for when you forget how use the command.
+#                      The help string provided will be listed and shown with
+#                      the 'help' command of the bot.
 #   regex:             regex pattern whose matches are valid ways to call the 
-#                      command
-#   markdown_convert:  true or false, whether markdown in reply shall be
-#                      formatted
-#   formatted:
-#   code:              true or false, whether reply shall be formatted as code
-#   split:             string which, where found, will cause a message to be
-#                      split
+#                      command.
+#                      If a bot message matches a regular expression, then the
+#                      corresponding command will be executed. 
+#                      If a bot message matched multiple regular expressions, 
+#                      only the first matching command will be executed!
+#                      It is recommended that the regular expressions are used
+#                      such that they are mutually exclusive to avoid
+#                      situation where one messages matches multiple regular
+#                      expressions.
+#   markdown_convert:  true or false. Specifies whether the message reply will
+#                      be formatted into markdown. 
+#                      Defaults to true.
+#   formatted:         true or false. Specifies whether message reply will
+#                      be sent as formatted message.
+#                      Defaults to true.
+#   code:              true or false. Specifies whether message reply will
+#                      be formatted as a code block with fixed-size font.
+#                      If set to True, markdown_convert will be ignored.
+#                      Defaults to false.
+#   split:             string which if set, splits the message reply into
+#                      multiple messages wherever the string specified in
+#                      split occurs.
+#                      Defaults to None, no message splitting by default.
 commands:
 
   # Custom commands
