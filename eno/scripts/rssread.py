@@ -38,25 +38,35 @@ import requests
 from dateutil import parser
 from fuzzywuzzy import fuzz
 
+DEFAULT_SEPARATOR = ""
+DEFAULT_NUMBER = 3
+
 
 def display_news(title, summary, summary_detail, content, link, pubDate):
     """Display the Parsed News."""
     # print(79*"=")
-    print("Title: " + title + "\n")
-    for line in textwrap.wrap(summary, width=79):
-        print(line)
-    if summary != "":
-        print("")
-    for line in textwrap.wrap(summary_detail, width=79):
-        print(line)
-    if summary_detail != "":
-        print("")
-    for line in textwrap.wrap(content, width=79):
-        print(line)
-    if content != "":
-        print("")
-    print("Link: " + link)
-    print("Pub.date: " + pubDate + "   =======================")
+    print("Title: " + title)
+    if not args.no_summary:
+        for line in textwrap.wrap(summary, width=79):
+            print(line)
+        # if summary != "":
+        #    print("")
+    if not args.no_summary_detail:
+        for line in textwrap.wrap(summary_detail, width=79):
+            print(line)
+        # if summary_detail != "":
+        #    print("")
+    if not args.no_content:
+        for line in textwrap.wrap(content, width=79):
+            print(line)
+        # if content != "":
+        #    print("")
+    if not args.no_link:
+        print("Link: " + link)
+    if not args.no_date:
+        print("Pub.date: " + pubDate)
+    if args.separator != "":
+        print(args.separator.replace("\\n", "\n"), end="")
 
 
 def get_date(entries):
@@ -68,111 +78,92 @@ def get_date(entries):
     return dop_date
 
 
-def get_news(  # noqa
-    entries, noe, fromday, uptoday, parsed_url, proxyindicator
-):
+def get_news_entry(entry, proxyindicator):  # noqa
+    """Get the title, link and summary of one news item."""
+    try:
+        title = entry["title"]
+    except Exception:
+        title = "Unknown"
+        pass
+    try:
+        link = entry["link"]
+    except Exception:
+        link = ""
+        pass
+    try:
+        summary_raw = re.sub("<[^<]+?>", "", str(entry["summary"]).replace("\n", " "),)
+        summary = "Summary: " + summary_raw
+    except Exception:
+        summary_raw = ""
+        summary = ""
+        pass
+    try:
+        summary_detail_raw = "Summary Detail: " + re.sub(
+            "<[^<]+?>", "", str(entry["summary_detail"]).replace("\n", ""),
+        )
+        summary_detail = "Summary Detail: " + summary_detail_raw
+    except Exception:
+        summary_detail_raw = ""
+        summary_detail = ""
+        pass
+    try:
+        content = "Content: " + re.sub("<[^<]+?>", "", str(entry["content"]))
+    except Exception:
+        content = ""
+        if "DEBUG" in os.environ:
+            pass  # print stacktrace
+    try:
+        pubDate = entry["published"]
+    except Exception:
+        pubDate = ""
+        pass
+    if content.find(summary_raw) == -1:
+        if "DEBUG" in os.environ:
+            print("Summary_detail and content are different!")
+        if fuzz.partial_ratio(summary_raw, content) > 90:
+            if "DEBUG" in os.environ:
+                print("Summary_detail and content are very similar!")
+            content = ""  # content is more or less a copy of summary
+    else:
+        content = ""  # content is just a copy of summary
+    if len(summary_raw) > 10000:
+        # if the summary is so big (10K+) I don't care about the
+        # details anymore
+        summary_detail = ""
+    elif summary_detail_raw.find(summary_raw) == -1:
+        if "DEBUG" in os.environ:
+            print("Summary_detail and summary are different!")
+            print(f"Sizes are {len(summary_detail_raw)} " f"and {len(summary_raw)}.")
+        if len(summary_detail_raw) > 10000 and len(summary_raw) > 10000:
+            if (
+                abs(len(summary_detail_raw) - len(summary_raw))
+                / max(len(summary_detail_raw), len(summary_raw))
+                < 0.15
+            ):
+                # summary_detail is more or less a copy of summary
+                summary_detail = ""
+        else:
+            if (
+                fuzz.partial_ratio(summary_detail_raw, summary_raw) > 90
+            ):  # this blows up for large text (20K+)
+                if "DEBUG" in os.environ:
+                    print("Summary_detail and summary are very similar!")
+                # summary_detail is more or less a copy of summary
+                summary_detail = ""
+    else:
+        summary_detail = ""  # summary_detail is just a copy of summary
+    display_news(
+        title + proxyindicator, summary, summary_detail, content, link, pubDate
+    )
+
+
+def get_news(entries, noe, fromday, uptoday, parsed_url, proxyindicator):
     """Get the title, link and summary of the news."""
     for i in range(0, noe):
-        logger.debug(f"\nEntry:: {entries[i]} \n\n")
+        logger.debug(f"Entry:: {entries[i]}")
         dop_date = get_date(entries[i])
         if dop_date >= fromday and dop_date <= uptoday:
-            try:
-                title = entries[i]["title"]
-            except Exception:
-                title = "Unknown"
-                pass
-            try:
-                link = entries[i]["link"]
-            except Exception:
-                link = ""
-                pass
-            try:
-                summary_raw = re.sub(
-                    "<[^<]+?>",
-                    "",
-                    str(entries[i]["summary"]).replace("\n", " "),
-                )
-                summary = "Summary: " + summary_raw
-            except Exception:
-                summary_raw = ""
-                summary = ""
-                pass
-            try:
-                summary_detail_raw = "Summary Detail: " + re.sub(
-                    "<[^<]+?>",
-                    "",
-                    str(entries[i]["summary_detail"]).replace("\n", ""),
-                )
-                summary_detail = "Summary Detail: " + summary_detail_raw
-            except Exception:
-                summary_detail_raw = ""
-                summary_detail = ""
-                pass
-            try:
-                content = "Content: " + re.sub(
-                    "<[^<]+?>", "", str(entries[i]["content"])
-                )
-            except Exception:
-                content = ""
-                if "DEBUG" in os.environ:
-                    pass  # print stacktrace
-            try:
-                pubDate = entries[i]["published"]
-            except Exception:
-                pubDate = ""
-                pass
-            if content.find(summary_raw) == -1:
-                if "DEBUG" in os.environ:
-                    print("Summary_detail and content are different!")
-                if fuzz.partial_ratio(summary_raw, content) > 90:
-                    if "DEBUG" in os.environ:
-                        print("Summary_detail and content are very similar!")
-                    content = ""  # content is more or less a copy of summary
-            else:
-                content = ""  # content is just a copy of summary
-            if len(summary_raw) > 10000:
-                # if the summary is so big (10K+) I don't care about the
-                # details anymore
-                summary_detail = ""
-            elif summary_detail_raw.find(summary_raw) == -1:
-                if "DEBUG" in os.environ:
-                    print("Summary_detail and summary are different!")
-                    print(
-                        f"Sizes are {len(summary_detail_raw)} "
-                        f"and {len(summary_raw)}."
-                    )
-                if (
-                    len(summary_detail_raw) > 10000
-                    and len(summary_raw) > 10000
-                ):
-                    if (
-                        abs(len(summary_detail_raw) - len(summary_raw))
-                        / max(len(summary_detail_raw), len(summary_raw))
-                        < 0.15
-                    ):
-                        # summary_detail is more or less a copy of summary
-                        summary_detail = ""
-                else:
-                    if (
-                        fuzz.partial_ratio(summary_detail_raw, summary_raw)
-                        > 90
-                    ):  # this blows up for large text (20K+)
-                        if "DEBUG" in os.environ:
-                            print(
-                                "Summary_detail and summary are very similar!"
-                            )
-                        # summary_detail is more or less a copy of summary
-                        summary_detail = ""
-            else:
-                summary_detail = ""  # summary_detail is just a copy of summary
-            display_news(
-                title + proxyindicator,
-                summary,
-                summary_detail,
-                content,
-                link,
-                pubDate,
-            )
+            get_news_entry(entries[i], proxyindicator)
 
 
 def parse_url(urls, noe, fromday, uptoday):
@@ -213,30 +204,26 @@ def parse_url(urls, noe, fromday, uptoday):
 if __name__ == "__main__":  # noqa
     logging.basicConfig()  # initialize root logger, a must
     if "DEBUG" in os.environ:
-        logging.getLogger().setLevel(
-            logging.DEBUG
-        )  # set root logger log level
+        logging.getLogger().setLevel(logging.DEBUG)  # set root logger log level
     else:
         logging.getLogger().setLevel(logging.INFO)  # set root logger log level
 
     # Construct the argument parser
-    ap = argparse.ArgumentParser(
-        description="This program reads news from an RSS feed."
-    )
+    ap = argparse.ArgumentParser(description="This program reads news from RSS feeds.")
     # Add the arguments to the parser
     ap.add_argument(
         "-d",
         "--debug",
         required=False,
         action="store_true",
-        help="Print debug information",
+        help="Print debug information.",
     )
     ap.add_argument(
         "-v",
         "--verbose",
         required=False,
         action="store_true",
-        help="Print verbose output",
+        help="Print verbose output.",
     )
     ap.add_argument(
         "-f",  # onion
@@ -244,21 +231,21 @@ if __name__ == "__main__":  # noqa
         required=True,
         type=str,
         nargs="+",
-        help="Specify RSS feed URL. E.g. --feed https://hnrss.org/frontpage",
+        help="Specify RSS feed URL. E.g. --feed https://hnrss.org/frontpage.",
     )
     ap.add_argument(
         "-o",  # onion
         "--tor",
         required=False,
         action="store_true",
-        help="Use Tor, go through Tor Socks5 proxy",
+        help="Use Tor, go through Tor Socks5 proxy.",
     )
     ap.add_argument(
         "-t",  # onion
         "--today",
         required=False,
         action="store_true",
-        help="Get today's entries from RSS feed",
+        help="Get today's entries from RSS feed.",
     )
     ap.add_argument(
         "-y",  # onion
@@ -272,7 +259,11 @@ if __name__ == "__main__":  # noqa
         "--number",
         required=False,
         type=int,
-        help="Number of last entries to get from from RSS feed. Default is 3.",
+        default=DEFAULT_NUMBER,
+        help=(
+            "Number of last entries to get from from RSS feed. "
+            f'Default is "{DEFAULT_NUMBER}".'
+        ),
     )
     ap.add_argument(
         "-b",  # beginning
@@ -294,12 +285,53 @@ if __name__ == "__main__":  # noqa
             "Specify in format YYYY-MM-DD such as 2021-02-26."
         ),
     )
+    ap.add_argument(
+        "-s",  # end
+        "--separator",
+        required=False,
+        type=str,
+        default=DEFAULT_SEPARATOR,
+        help=(
+            "Specify a separator to be printed after each RSS entry. "
+            f'Default is "{DEFAULT_SEPARATOR}". '
+            f'E.g. use "\\n" to print an empty line. '
+            f'Or use "==================\\n" to print a dashed line.'
+        ),
+    )
+    ap.add_argument(
+        "--no-link",
+        required=False,
+        action="store_true",
+        help='Don\'t print the "Link" record of the RSS entry.',
+    )
+    ap.add_argument(
+        "--no-date",
+        required=False,
+        action="store_true",
+        help='Don\'t print the "Publish Date" record of the RSS entry.',
+    )
+    ap.add_argument(
+        "--no-summary",
+        required=False,
+        action="store_true",
+        help='Don\'t print the "Summary" record of the RSS entry.',
+    )
+    ap.add_argument(
+        "--no-summary-detail",
+        required=False,
+        action="store_true",
+        help='Don\'t print the "Summary Detail" record of the RSS entry.',
+    )
+    ap.add_argument(
+        "--no-content",
+        required=False,
+        action="store_true",
+        help='Don\'t print the "Content" record of the RSS entry.',
+    )
     args = ap.parse_args()
     if args.debug:
-        logging.getLogger().setLevel(
-            logging.DEBUG
-        )  # set root logger log level
-        logging.getLogger().info("Debug is info on.")
+        logging.getLogger().setLevel(logging.DEBUG)  # set root logger log level
+        logging.getLogger().info("Debugging is turned on.")
     logger = logging.getLogger("readrss")
     # logging.getLogger().info("Debug is turned on.")
 
@@ -308,11 +340,9 @@ if __name__ == "__main__":  # noqa
     yesterday = today - timedelta(1)
     ayearago = today - timedelta(365)
 
-    noe = 3  # default: get last 3 posts
+    noe = args.number  # initialize
     fromday = ayearago
     uptoday = today
-    if args.number:
-        noe = args.number
     if args.today:
         fromday = today  # all entries of today
     if args.yesterday:
@@ -334,13 +364,11 @@ if __name__ == "__main__":  # noqa
     except requests.exceptions.ConnectionError as e:
         if args.tor:
             print(
-                f"ConnectionError: Maybe Tor is not running. ({e})",
-                file=sys.stderr,
+                f"ConnectionError: Maybe Tor is not running. ({e})", file=sys.stderr,
             )
         else:
             print(
-                "ConnectionError: "
-                f"Maybe network connection is not down. ({e})",
+                "ConnectionError: " f"Maybe network connection is not down. ({e})",
                 file=sys.stderr,
             )
         sys.exit(1)
