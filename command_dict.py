@@ -8,7 +8,6 @@ logger = logging.getLogger(__name__)
 
 
 class CommandDictSanityError(Exception):
-    # TODO give a string to this exception
     pass
 
 
@@ -85,7 +84,6 @@ class CommandDict:
         is not considered "sane".
         
         """
-        # TODO test
         # Maybe in the future: Check whether commands can be found in path
         # For now, let the OS handle this
 
@@ -160,7 +158,6 @@ class CommandDict:
             string (str): string to match
 
         """
-        # TODO test
         matched = False
         cmd = None
 
@@ -210,8 +207,6 @@ class CommandDict:
         else:
             return "No help defined for this command."
 
-    # TODO implement the methods below
-    
     def get_opt_markdown_convert(self, command):
         """Return boolean of the "markdown_convert" option.
 

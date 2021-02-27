@@ -72,7 +72,6 @@ class Command(object):
             f"bot_commands :: Command.process: {self.command} {self.room}"
         )
 
-        # TODO implement both echo and whoami as separate scripts
         if re.match(
             "^help$|^ayuda$|^man$|^manual$|^hilfe$|"
             "^je suis perdu$|^perdu$|^socorro$|^h$|"
