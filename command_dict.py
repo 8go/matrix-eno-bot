@@ -15,7 +15,7 @@ class CommandDict:
 
     # Default formatting options
     DEFAULT_OPT_MARKDOWN_CONVERT = True
-    DEFAULT_OPT_FORMATTED        = False
+    DEFAULT_OPT_FORMATTED        = True
     DEFAULT_OPT_CODE             = False
     DEFAULT_OPT_SPLIT            = None
 
