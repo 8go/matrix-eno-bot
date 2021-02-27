@@ -56,7 +56,7 @@ storage:
   # containing encryption keys, sync tokens, etc.
   store_filepath: "./store"
   # The path to the command dictionary configuration file
-  # command_dict_filepath: "./commands.yaml"
+  command_dict_filepath: "./commands.yaml"
 
 # Logging setup
 logging:
