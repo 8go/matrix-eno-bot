@@ -10,5 +10,3 @@ if __name__ == "__main__":
         response = "echo!"
 
     print(response)
-    # await send_text_to_room(self.client, self.room.room_id, response)
-
