@@ -1,27 +1,49 @@
+#
+# ***** Initialization *****
 # This is an example command dictionary configuration. Mind you, this is an
-# example script meant to convey the structure of this configuration, it will
-# probably not work as is on your terminal.
+# example configuration meant to convey the structure of the configuration
+# file. It will probably not work as is in your environment. 
+# So, copy this file to "commands.yaml". Then modify and adjust 
+# "commands.yaml" to suit your needs. E.g. On Linux you would do
 
-# Paths that will be added to the runtime PATH variable. Add any paths of
-# executables called from your custom commands, the paths of which are not 
-# yet in the environment PATH variable.
-# Make sure the bot has read and execute access to the scripts, otherwise they
-# won't work.
+# $ cp commands.yaml.example commands.yaml
+# $ nano commands.yaml # adjust to your needs, especially the paths!
+
+
+# ***** Paths *****
+
+# The bot needs to find your commands. For that the bot uses the PATH 
+# variable. By adjusting the "paths" values below you can add additional
+# paths to the system PATH variable. If the bot is using commands that
+# are not already on the system PATH, you must add the additional command
+# paths below. 
+# Furthermore, make sure the bot has read and execute access
+# to the commands, otherwise they won't work.
+# Here we show two example command paths. Adjust them as needed.
 paths:
   - /home/YOURUSER/.local/lib/matrix-eno-bot/eno/scripts
   - /home/YOURUSER/.local/etc/matrix-eno-bot/bin
 
-# Definitions of bot commands.
-# The children of the "commands" key are the command names. These are the
-# commands that you want to add to your bot, and which you will invoke by name.
-# They in turn may have the following keys (or properties):
+
+# ***** Commands *****
+
+# Commands are a list of specifications for your bot commands.
+# The children of the "commands" key are the command names. 
+# Command names are nick names like "alert" or "backup". 
+# Each command, listed by its name, has the following 
+# keys (or properties):
 #
-#   cmd:               name of the command or executable, which the bot
-#                      will attempt to call and pass arguments to.
-#   help:              help string for when you forget how use the command.
+#   cmd:               dtring: name of the command, executable, or script.
+#                      The bot will attempt to execute this command when
+#                      triggered. The bot will call this "cmd" and pass 
+#                      the given arguments to it.
+#                      Example: "date" (a command provided by the OS)
+#   help:              string: help string explaining the command.
+#                      This is useful when you forget how use the command.
 #                      The help string provided will be listed and shown with
 #                      the 'help' command of the bot.
-#   regex:             regex pattern whose matches are valid ways to call the 
+#                      Example: "returns the current date of the server"
+#   regex:             string: regex pattern whose matches are valid ways to call the 
 #                      command.
 #                      If a bot message matches a regular expression, then the
 #                      corresponding command will be executed. 
@@ -31,27 +53,54 @@ paths:
 #                      such that they are mutually exclusive to avoid
 #                      situation where one messages matches multiple regular
 #                      expressions.
-#   markdown_convert:  true or false. Specifies whether the message reply will
-#                      be formatted into markdown. 
+#                      When the "regex" matches the "cmd" will be triggered.
+#                      Example: "^date$" (only the exact string of "date"
+#                      will match) 
+#   markdown_convert:  true or false: Specifies whether the message reply has
+#                      been formatted in markdown.
+#                      The bot will convert this markdown-formatted input
+#                      and convert it into an HTML-like format understood by
+#                      Matrix, so that the bot reply shows up visually as
+#                      nice as the markdown input.
 #                      Defaults to true.
-#   formatted:         true or false. Specifies whether message reply will
-#                      be sent as formatted message.
+#                      Example: Your command output is a markdown formatted
+#                      string such as "I *really* like it!" Set 
+#                      markdown_convert to true and the receiver gets the
+#                      text "I really like it!" with the word "really"
+#                      visually in italic. In short, use "true", whenever
+#                      your command output is a markdown-formatted string;
+#                      false otherwise.
+#   formatted:         true or false: Specifies whether message reply will
+#                      be sent as a formatted message.
 #                      Defaults to true.
-#   code:              true or false. Specifies whether message reply will
+#   code:              true or false: Specifies whether message reply will
 #                      be formatted as a code block with fixed-size font.
-#                      If set to True, markdown_convert will be ignored.
+#                      If set to "true", "markdown_convert" will be ignored.
 #                      Defaults to false.
-#   split:             string which if set, splits the message reply into
-#                      multiple messages wherever the string specified in
+#   split:             string: if this string is set, splits the message reply
+#                      into multiple messages wherever the string specified in
 #                      split occurs.
 #                      Defaults to None, no message splitting by default.
+#                      Example: "\n\n\n" (Wherever the command output contains 
+#                      two empty lines, the output will be split. Each piece
+#                      will be sent as a separate reply message.
 commands:
 
-  # Custom commands
-  # ---------------
+  # There are 3 kinds of commands.
+  # a) built-in commands
+  # b) pre-packed commands provided by the matrix-eno-bot repo
+  # c) your custom commands that you can add
+  #    To add your custom commands go to the end of file, you will
+  #    find a "Custom commands" header there. Add them there.
 
-  # Default commands
-  # ----------------
+  # Built-in commands
+  # ---------------
+  # help : "help" is a reserved word, so don't use it as a custom command!
+  # reload : "reload" is a reserved word, so don't use it as a custom command!
+
+
+  # Pre-packed commands provided by the matrix-eno-bot repo
+  # -------------------------------------------------------
 
   # alert if too many resources are used, best to use with cron
   alert:
@@ -94,11 +143,11 @@ commands:
     markdown_convert:  false
     formatted:         true
     code:              false
-  # CPU temperature
+  # CPU temperature, to monitor the CPU temperatures
   cputemp:
     regex:             "^cpu$|^temp$|^temperature$|^celsius$|^cputemp.*$|^hot$|^chaud$",
     cmd:               cputemp.sh
-    help:              monitor the CPU temperatures
+    help:              give the current CPU temperatures
     markdown_convert:  false
     formatted:         true
     code:              false
@@ -106,7 +155,7 @@ commands:
   datetime:
     regex:             "^date$|^time$|^tiempo$|^hora$|^temps$|^heure$|^heures$|^datum$|^zeit$|^datetime.sh$"
     cmd:               datetime.sh
-    help:              gives date and time of server
+    help:              give current date and time of server
     markdown_convert:  false
     formatted:         true
     code:              true
@@ -118,7 +167,7 @@ commands:
     markdown_convert:  false
     formatted:         true
     code:              false
-  # disk space
+  # disk space, monitor disk space
   disks:
     regex:             "^disks$|^disk$|^full$|^space$|^disks.sh$"
     cmd:               disks.sh
@@ -126,12 +175,12 @@ commands:
     markdown_convert:  false
     formatted:         true
     code:              true
-  # echo
+  # echo, trivial example to have the bot respond
   echo:
     regex:             "^echo$|^echo .*"
     cmd:               echo.py
-    help:              trivial example to have the bot respond, it echoes
-    markdown_convert:  true
+    help:              bot echoes back your input
+    markdown_convert:  false
     formatted:         true
     code:              false
   # get ETH ticker
@@ -184,7 +233,7 @@ commands:
   platforminfo:
     regex:             "^platform$|^platform .*|^platforminfo.py$"
     cmd:               platforminfo.py
-    help:              gives hardware and operating system platform information
+    help:              give hardware and operating system platform information
   # ps, host status
   ps:
     regex:             "^ps$|^ps .*|^ps.sh$"
@@ -214,7 +263,7 @@ commands:
   s2f:
     regex:             "^s2f$|^mys2f.py.*|^flow$|^s2f|^flow .*$|^s2f .$|^s-to-f$|^stock-to-flow .*$|^eyf$|^eyf .*$|^e-y-f$"
     cmd:               s2f.sh
-    help:              gives Stock-to-flow info
+    help:              give Stock-to-flow info
     markdown_convert:  false
     formatted:         true
     code:              true
@@ -230,7 +279,7 @@ commands:
   top:
     regex:             "^top$|^top .*|^top.sh$|^top.sh .*"
     cmd:               top.sh
-    help:              gives 5 top CPU and RAM consuming processes
+    help:              list 5 top CPU and RAM consuming processes
     markdown_convert:  false
     formatted:         true
     code:              true
@@ -287,7 +336,7 @@ commands:
   weather:
     regex:             "^weather$|^tiempo$|^wetter$|^temps$|^weather .*$|^tiempo .*$|^eltiempo .*$|^wetter .*$|^temps .*$|^weather.sh$|^weather.sh .*"
     cmd:               weather.sh
-    help:              gives weather forecast
+    help:              give weather forecast
     markdown_convert:  false
     formatted:         true
     code:              true
@@ -295,7 +344,7 @@ commands:
   web:
     regex:             "^www$|^web$|^web .*$|^www .*$|^browse$|^browse .*|^web.sh$|^web.sh .*"
     cmd:               web.sh
-    help:              surf the web, get a web page (JavaScript not supported)
+    help:              surf the web, get a web page (JavaScript pages not supported)
     markdown_convert:  false
     formatted:         true
     code:              false
@@ -303,8 +352,15 @@ commands:
   whoami:
     regex:             "^w$|^who$|^whoami$"
     cmd:               whoami.py
-    help:              returns information about the user, whose unix account is running the bot
-    markdown_convert:  true
+    help:              return information about the user, whose unix account is running the bot
+    markdown_convert:  false
     formatted:         true
     code:              false
 
+
+  # Custom commands
+  # ---------------
+
+  # add your custom commands here
+  
+# End of commands configuration file
