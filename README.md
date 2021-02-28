@@ -16,19 +16,6 @@ Hence, the "logo" which is nothing more than an Nsibidi symbol taken from [Wikip
 
 And a month after creating this repo by pure chance, this [Urban Dictionary link](https://www.urbandictionary.com/define.php?term=Eno) for `eno` popped up. Here, the word `eno` is defined as: _Totally awesome, Wicked cool. Hyperbole of awesome/cool. E.g. Dude, that round of speedball was so eno!_ What a fitting coincidence! Perfect fit! So cool, oops, so eno!
 
-## History and Past
-
-The first version of the bot was [tiny-matrix-bot plus](https://github.com/8go/tiny-matrix-bot) which was based on [matrix-python-sdk](https://github.com/matrix-org/matrix-python-sdk). Since `matrix-python-sdk` is no longer actively supported and end-to-end-encryption comes out of the box in `matrix-nio`, the switch to `nio-template` was made. [tiny-matrix-bot plus](https://github.com/8go/tiny-matrix-bot) is now abandonded and all efforts are put into `matrix-eno-bot`.
-
-Due to this history, you will find strong similarieties in the Bash scripts in [tiny-matrix-bot plus](https://github.com/8go/tiny-matrix-bot) and `eno`.
-
-`eno` includes various modifications and enhancements in comparison to [nio-template](https://github.com/8go/nio-template). `nio-template` was forked in summer of 2020. Since then my fork has drifted apart from the original `nio-template`. The framework files of `nio-template` used by `eno` have these enhancements:
-
-- use of access token instead of password
-- option to trust own devices
-- option to change device name
-- emoji verification and handling of `to_device` messages
-- sending of images and files (audio, video, pdf, etc.)
 
 
 ## Installation and Setup
@@ -46,9 +33,12 @@ cd matrix-eno-bot
 # configure bot basics
 cp config.yaml.example config.yaml
 vim config.yaml # adjust the config file to your needs
-# configure bot command dictionary (thanks to @wolterhv)
+# configure bot command dictionary (applause and thanks to @wolterhv)
+# first, read all the comments in commands.yaml.example
+# then adjust the "paths"
+# then (optionally) add your own commands at the end of the file
 cp commands.yaml.example commands.yaml
-vim commands.yaml # adjust the commands config file to your needs
+vim commands.yaml # adjust paths, add your custom commands
 # make scripts executable
 chmod 755 eno/scripts/*
 # configure bot as service
@@ -65,9 +55,10 @@ systemctl stop matrix-eno-bot # stop bot
 Other hints:
 - Create an account for your bot in some client, e.g. in Element
 - Use this account (username, password) in `config.yaml` and let the bot create a `brand-new` device
-  - If device is not new e2ee will not work.
+  - If device is not new e2ee will not work!
 - Verify the bot via emoji-verify
 - If desired reconfigure `config.yaml` to replace password with access token for added security
+
 
 ## Installation as Docker Container
 
@@ -78,7 +69,8 @@ it in a docker container and then install the Docker container.
 - To build the Docker image (~500mb): `docker build -t matrix-eno-bot --rm .`
 - To run the container: `docker run --rm -ti matrix-eno-bot bash`
 
-Thanks to @apiraino for this contribution!
+Thanks and :clap: to @apiraino for this contribution!
+
 
 ## Usage
 
@@ -100,8 +92,9 @@ Thanks to @apiraino for this contribution!
 
 ## Feedback
 
-- If you like the `matrix-eno-bot` please give it a :star: on Github right away. 
-  Thanks :heart: Raise issues or contribute a PR.
+- If you like the `matrix-eno-bot` please give it a :star: on Github right away. Thanks :heart: !
+- Raise issues or contribute a PR. :thumbsup: to those who have already done so!
+
 
 ## Debugging
 
@@ -160,41 +153,58 @@ With these commands a system administrator can maintain his Matrix installation 
 
 ## Other Features
 
-- sample scripts are in `bash` and in `python3`, but can be in any language (JavaScript, Go, etc.)
-- easily extendable via command dictionary in convenient commands.yaml file (thanks to @wolterhv)
+- sample scripts are in `bash` and in `python3`, but can be in any language (JavaScript, Go, Microsoft .bat files, etc.)
+- easily extendable via command dictionary in convenient commands.yaml configuration file (:clap: for the excellent work of @wolterhv, :thumbsup:)
+  - This means that you can modify this bot without any programming knowledge or knowledge of Python.
+  - The user can add new commands simple by editing a text file. So new commands can be added via configuration, rather than via programming.
 - matrix-eno-bot combines well with [matrix-commander](https://github.com/8go/matrix-commander). Configure `matrix-commander` as another eno bot device.
 - `matrix-commander` can then be used very easily for monitoring the system. An admin can set up a cron job that runs every 15 minutes, e.g. to check CPU temperature, or to check a log file for signs of an intrusion (e.g. SSH or Web Server log files). If anything abnormal is found by the cron job, the cron job fires off a bot message to the admin.
+- matrix-eno-bot and `matrix-commander` can share all of the "commands" or scripts
+
 
 ## Legal
 
 There is no support and no warranty.
 
+
+## History and Past
+
+The first version of the bot was [tiny-matrix-bot plus](https://github.com/8go/tiny-matrix-bot) which was based on [matrix-python-sdk](https://github.com/matrix-org/matrix-python-sdk). Since `matrix-python-sdk` is no longer actively supported and end-to-end-encryption comes out of the box in `matrix-nio`, the switch to `nio-template` was made. 
+The [nio-template](https://github.com/anoadragon453/nio-template) is a template for creating bots with
+[matrix-nio](https://github.com/poljar/matrix-nio). The documentation for
+matrix-nio can be found
+[here](https://matrix-nio.readthedocs.io/en/latest/nio.html). 
+For up-to-date info on `nio-template` go to https://github.com/anoadragon453/nio-template.
+Give them a :star: if you like it. They deserve :clap:.
+
+[tiny-matrix-bot plus](https://github.com/8go/tiny-matrix-bot) is now abandonded and all efforts are put into `matrix-eno-bot`.
+
+Due to this history, you will find strong similarieties in the Bash scripts in [tiny-matrix-bot plus](https://github.com/8go/tiny-matrix-bot) and `eno`.
+
+`eno` includes various modifications and enhancements in comparison to [nio-template](https://github.com/8go/nio-template). `nio-template` was forked in summer of 2020. Since then my fork has drifted apart from the original `nio-template`. The framework files of `nio-template` used by `eno` have these enhancements:
+
+- use of access token instead of password
+- option to trust own devices
+- option to change device name
+- emoji verification and handling of `to_device` messages
+- sending of images and files (audio, video, pdf, etc.)
+- adding commands and customization through the editing of a text file rather than editing Python code. 
+
+
 ## Final Thoughts
 
 - Thanks a lot to the people that have already contributed! It is so appreciated! :heart:
 - Enjoy and have fun with it, it is cool, and easily extensible. Adjust it to your needs!
-- Pull Requests are welcome :)
-
-
+- Pull Requests on :octocat: are welcome :)
 
 
 ---
----
----
 
 
-# More on the Nio Template
+# Very Rough Project Code Overview
 
-
-The [nio-template](https://github.com/anoadragon453/nio-template) is a template for creating bots with
-[matrix-nio](https://github.com/poljar/matrix-nio). The documentation for
-matrix-nio can be found
-[here](https://matrix-nio.readthedocs.io/en/latest/nio.html).
-
-For up-to-date info on `nio-template` go to https://github.com/anoadragon453/nio-template.
-Give them a star if you like it.
-
-## Project structure
+I am not keeping this overview very up to date. So some portions might be out-of-date.
+This is just to give you a rough idea of how the code is structured.
 
 ### `main.py`
 
@@ -255,15 +265,21 @@ verification._
 
 ### `bot_commands.py`
 
-Where all the bot's commands are defined. New commands should be defined in
-`process` with an associated private method. `echo` and `help` commands are
-provided by default.
+Where the bot's (currently) two built-in commands are defined: `help` 
+and `reload`.
 
 A `Command` object is created when a message comes in that's recognised as a
 command from a user directed at the bot (either through the specified command
 prefix (defined by the bot's config file), or through a private message
 directly to the bot. The `process` command is then called for the bot to act on
 that command.
+
+In `process` function, the commands will be recognized via their 
+regular expression signature. 
+If a regular expression matches the input, the corresponding command
+is called. User commands are not implemented here, but configured 
+through the `commands.yaml` config file. See, `commands.yaml.example`.
+
 
 ### `message_responses.py`
 
@@ -291,9 +307,24 @@ audio, video, PDFs, etc._
 Custom error types for the bot. Currently there's only one special type that's
 defined for when a error is found while the config file is being processed.
 
+### `command_dict.py`
+
+Commands are nearly exclusively specified in a Yaml config file `commands.yaml`.
+This yaml file is read and internally a dictionary structure is created holding
+all the information specified in `commands.yaml`. This file has a class that 
+implements all operations necessary on this command dictionary.
+
 ### `config.yaml.example`
 
 The sample configuration file. People running your bot should be advised to
 copy this file to `config.yaml`, then edit it according to their needs. Be sure
 never to check the edited `config.yaml` into source control since it'll likely
 contain sensitive details like passwords!
+
+### `commands.yaml.example`
+
+The sample commands file. People running your bot should be advised to
+copy this file to `commands.yaml`, then edit it according to their needs. 
+Here is where users can specify new commands, simply by editing a text file
+(in Yaml format). No knowledge of Python is needed. 
+
