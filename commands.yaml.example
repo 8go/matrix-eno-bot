@@ -33,7 +33,7 @@ paths:
 # Each command, listed by its name, has the following 
 # keys (or properties):
 #
-#   cmd:               dtring: name of the command, executable, or script.
+#   cmd:               string: name of the command, executable, or script.
 #                      The bot will attempt to execute this command when
 #                      triggered. The bot will call this "cmd" and pass 
 #                      the given arguments to it.

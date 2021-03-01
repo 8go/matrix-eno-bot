@@ -14,6 +14,8 @@ class CommandDictSanityError(Exception):
 class CommandDict:
 
     # Default formatting options
+    # Mirror the defaults in the definition of the send_text_to_room
+    # function in chat_functions.py
     DEFAULT_OPT_MARKDOWN_CONVERT = True
     DEFAULT_OPT_FORMATTED        = True
     DEFAULT_OPT_CODE             = False

@@ -47,7 +47,7 @@ cp matrix-eno-bot.service.example matrix-eno-bot.service
 vim matrix-eno-bot.service # adjust service to your setup
 sudo cp matrix-eno-bot.service /etc/systemd/system/matrix-eno-bot.service
 # read the comments in matrix-eno-bot.service, it tells you what to do
-systemctl enable matrix-eno-bot # create bot service
+systemctl enable matrix-eno-bot # let bot autostart at boot
 systemctl start matrix-eno-bot # start bot
 systemctl stop matrix-eno-bot # stop bot
 ```
