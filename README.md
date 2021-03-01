@@ -195,7 +195,7 @@ Due to this history, you will find strong similarieties in the Bash scripts in [
 
 - Thanks a lot to the people that have already contributed! It is so appreciated! :heart:
 - Enjoy and have fun with it, it is cool, and easily extensible. Adjust it to your needs!
-- Pull Requests on :octocat: are welcome :)
+- Pull Requests on :octocat: are welcome :)  See feature-requests on `isuues` page for ideas.
 
 
 ---
