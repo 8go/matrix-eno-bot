@@ -77,7 +77,7 @@ fi
 function dojson() {
     [ "${DEBUG,,}" == "true" ] && echo "DEBUG: You requested \"${arg1,,}\" news article"
     case "${arg1,,}" in
-    'y' | 'yesterday')
+    'y' | 'yesterday' | 202[0-9]-[0-1][0-9]-[0-3][0-9])
         x=0
         while :; do
             mndate=$(echo "$mnjson" | jq ".data[$x].published_at")
