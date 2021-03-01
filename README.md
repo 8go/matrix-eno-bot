@@ -90,9 +90,9 @@ Thanks and :clap: to @apiraino for this contribution!
 - bot can handle encrypted rooms by default
 - bot can handle texts, images, and arbitrary files (send audio, PDF, video, etc.)
 
-## Feedback
+## Feedback, Give it a :star:
 
-- If you like the `matrix-eno-bot` please give it a :star: on Github right away. Thanks :heart: !
+- If you like the `matrix-eno-bot` please give it a :star: on Github right away, so that others can find it more easily. Thanks :heart: !
 - Raise issues or contribute a PR. :thumbsup: to those who have already done so!
 
 
