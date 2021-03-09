@@ -42,10 +42,11 @@ DEFAULT_SEPARATOR = ""
 DEFAULT_NUMBER = 3
 
 
-def display_news(title, summary, summary_detail, content, link, pubDate):
+def display_news(title, summary, summary_detail, content, link, pubDate):  # noqa
     """Display the Parsed News."""
     # print(79*"=")
-    print("Title: " + title)
+    if not args.no_title:
+        print("Title: " + title)
     if not args.no_summary:
         for line in textwrap.wrap(summary, width=79):
             print(line)
@@ -91,23 +92,28 @@ def get_news_entry(entry, proxyindicator):  # noqa
         link = ""
         pass
     try:
-        summary_raw = re.sub("<[^<]+?>", "", str(entry["summary"]).replace("\n", " "),)
+        summary_raw = re.sub("<[^<]+?>", " ", str(entry["summary"]).replace("\n", " "),)
         summary = "Summary: " + summary_raw
+        summary = " ".join(summary.split())  # collapse multiple spaces
     except Exception:
         summary_raw = ""
         summary = ""
         pass
     try:
         summary_detail_raw = "Summary Detail: " + re.sub(
-            "<[^<]+?>", "", str(entry["summary_detail"]).replace("\n", ""),
+            "<[^<]+?>", " ", str(entry["summary_detail"]).replace("\n", " "),
         )
         summary_detail = "Summary Detail: " + summary_detail_raw
+        # collapse multiple spaces into a single space
+        summary_detail = " ".join(summary_detail.split())
     except Exception:
         summary_detail_raw = ""
         summary_detail = ""
         pass
     try:
-        content = "Content: " + re.sub("<[^<]+?>", "", str(entry["content"]))
+        content = "Content: " + re.sub("<[^<]+?>", " ", str(entry["content"]))
+        # collapse multiple spaces into a single space
+        content = " ".join(content.split())
     except Exception:
         content = ""
         if "DEBUG" in os.environ:
@@ -226,7 +232,7 @@ if __name__ == "__main__":  # noqa
         help="Print verbose output.",
     )
     ap.add_argument(
-        "-f",  # onion
+        "-f",  # feed
         "--feed",
         required=True,
         type=str,
@@ -241,21 +247,21 @@ if __name__ == "__main__":  # noqa
         help="Use Tor, go through Tor Socks5 proxy.",
     )
     ap.add_argument(
-        "-t",  # onion
+        "-t",  # today
         "--today",
         required=False,
         action="store_true",
         help="Get today's entries from RSS feed.",
     )
     ap.add_argument(
-        "-y",  # onion
+        "-y",  # yesterday
         "--yesterday",
         required=False,
         action="store_true",
         help="Get yesterday's entries from RSS feed",
     )
     ap.add_argument(
-        "-n",  # onion
+        "-n",  # number
         "--number",
         required=False,
         type=int,
@@ -286,7 +292,7 @@ if __name__ == "__main__":  # noqa
         ),
     )
     ap.add_argument(
-        "-s",  # end
+        "-s",  # separator
         "--separator",
         required=False,
         type=str,
@@ -294,21 +300,21 @@ if __name__ == "__main__":  # noqa
         help=(
             "Specify a separator to be printed after each RSS entry. "
             f'Default is "{DEFAULT_SEPARATOR}". '
-            f'E.g. use "\\n" to print an empty line. '
-            f'Or use "==================\\n" to print a dashed line.'
+            'E.g. use "\\n" to print an empty line. '
+            'Or use "==================\\n" to print a dashed line. '
+            'Note that letters like "-" or "newline" might need to be '
+            'escaped like "\\-" or "\\n".'
         ),
     )
     ap.add_argument(
-        "--no-link",
+        "--no-title",
         required=False,
         action="store_true",
-        help='Don\'t print the "Link" record of the RSS entry.',
-    )
-    ap.add_argument(
-        "--no-date",
-        required=False,
-        action="store_true",
-        help='Don\'t print the "Publish Date" record of the RSS entry.',
+        help=(
+            'Don\'t print the "Title" record of the RSS entry. This is '
+            "useful for example for feeds where the title is just a "
+            "repetition of the first words of the summary. "
+        ),
     )
     ap.add_argument(
         "--no-summary",
@@ -327,6 +333,18 @@ if __name__ == "__main__":  # noqa
         required=False,
         action="store_true",
         help='Don\'t print the "Content" record of the RSS entry.',
+    )
+    ap.add_argument(
+        "--no-link",
+        required=False,
+        action="store_true",
+        help='Don\'t print the "Link" record of the RSS entry.',
+    )
+    ap.add_argument(
+        "--no-date",
+        required=False,
+        action="store_true",
+        help='Don\'t print the "Publish Date" record of the RSS entry.',
     )
     args = ap.parse_args()
     if args.debug:
