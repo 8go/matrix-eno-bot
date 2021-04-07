@@ -176,7 +176,7 @@ class CommandDict:
                     cmd = command
                     break
             
-        if len(cmd) > 0:
+        if cmd and len(cmd) > 0:
             self._last_matched_command = cmd
         else:
             self._last_matched_command = None
