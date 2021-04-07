@@ -128,7 +128,7 @@ commands:
     code:              true
   # get cheatsheets, see https://github.com/cheat/cheat
   cheatsheet:
-    regex:             "^cheat$|^cheatsheet$|^chuleta$|^cheat.sh$|^cheat .*$|^cheatsheet .*$|^chuleta .*$|^cheat.sh .*$",
+    regex:             "^cheat$|^cheatsheet$|^chuleta$|^cheat.sh$|^cheat .*$|^cheatsheet .*$|^chuleta .*$|^cheat.sh .*$"
     cmd:               cheat
     help:              get cheatsheets, see https://github.com/cheat/cheat
     markdown_convert:  false
@@ -137,7 +137,7 @@ commands:
   # check status and look for updates
   # see also: upgrade
   check:
-    regex:             "^check$|^chk$|^status$|^state$|^check .*$|^chk .*|^status .*$|^state .*$|^check.sh$|^check.sh .*",
+    regex:             "^check$|^chk$|^status$|^state$|^check .*$|^chk .*|^status .*$|^state .*$|^check.sh$|^check.sh .*"
     cmd:               check.sh
     help:              check status, health status, updates, etc.
     markdown_convert:  false
@@ -145,7 +145,7 @@ commands:
     code:              false
   # CPU temperature, to monitor the CPU temperatures
   cputemp:
-    regex:             "^cpu$|^temp$|^temperature$|^celsius$|^cputemp.*$|^hot$|^chaud$",
+    regex:             "^cpu$|^temp$|^temperature$|^celsius$|^cputemp.*$|^hot$|^chaud$"
     cmd:               cputemp.sh
     help:              give the current CPU temperatures
     markdown_convert:  false
