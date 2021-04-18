@@ -285,7 +285,7 @@ commands:
     code:              true
   # get TOTP 2FA pin
   totp:
-    regex:             "^otp$|^totp$|^otp .*$|^totp .*$|"
+    regex:             "^otp$|^totp$|^otp .*$|^totp .*$"
     cmd:               totp.sh
     help:              get 2FA Two-factor-authentication TOTP PIN via bot message
     markdown_convert:  false
@@ -309,7 +309,7 @@ commands:
     code:              false
   # list matrix users by issuing a REST API query
   users:
-    regex:             "^usr$|^user$|^users$|^users .*$|^users.sh$|"
+    regex:             "^usr$|^user$|^users$|^users .*$|^users.sh$"
     cmd:               users.sh
     help:              list registered Matrix users
     markdown_convert:  false
