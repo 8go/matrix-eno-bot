@@ -93,7 +93,9 @@ async def send_text_to_room(
             content["format"] = "org.matrix.custom.html"
 
         if code:
-            content["formatted_body"] = "<pre><code>" + message + "</code></pre>"
+            content["formatted_body"] = "<pre><code>" + message + "\n</code></pre>\n"
+            # next line: work-around for Element on Android
+            content["body"] = "```\n" + message + "\n```"  # to format it as code
         elif markdown_convert:
             content["formatted_body"] = markdown(message)
 
