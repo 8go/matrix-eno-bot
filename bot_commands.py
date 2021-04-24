@@ -178,11 +178,20 @@ class Command(object):
             logger.debug(
                 f'OS command "{argv_list[0]}" with ' f'args: "{argv_list[1:]}"'
             )
+
+            # Set any special ENV vars you want available to the process here.
+            # Note that subprocess.Popen *replaces* env here, so we have to augment
+            # the existing ENV for the daemon user to ensure more or less "expected"
+            # operation (important RE $PATH, etc).
+            new_env = os.environ.copy()
+            new_env['ENO_SENDER'] = self.event.sender
+
             run = subprocess.Popen(
                 argv_list,  # list of argv
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 universal_newlines=True,
+                env=new_env,
             )
             output, std_err = run.communicate()
             output = output.strip()

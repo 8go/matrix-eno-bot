@@ -1,6 +1,11 @@
 #!/bin/bash
+if [[ "$ENO_SENDER" != "" ]]; then
+   PREFIX="${ENO_SENDER}, "
+else
+   PREFIX=""
+fi
 
-echo "You're an awesome friend.
+MSG=$(echo "You're an awesome friend.
 You're a gift to those around you.
 You're a smart cookie.
 You are awesome!
@@ -174,6 +179,8 @@ You win me over every day.
 You’re intelligent.
 You’re interesting.
 You’re talented.
-I’m so glad you’re mine." | shuf -n1
+I’m so glad you’re mine." | shuf -n1)
+
+echo "${PREFIX}$MSG"
 
 # EOF
