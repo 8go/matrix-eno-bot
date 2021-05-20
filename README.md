@@ -94,6 +94,7 @@ Thanks and :clap: to @apiraino for this contribution!
 
 - If you like the `matrix-eno-bot` please give it a :star: on Github right away, so that others can find it more easily. Thanks :heart: !
 - Raise issues or contribute a PR. :thumbsup: to those who have already done so!
+- :heart: and :clap: to contributors @wolterhv, @apiraino, @troglodyne, etc.
 
 
 ## Debugging
