@@ -219,7 +219,7 @@ class CommandDict:
 
         """
         if "markdown_convert" in self.command_dict["commands"][command].keys():
-            return self.command_dict["commands"][command]["markdown_convert"] == "true"
+            return self.command_dict["commands"][command]["markdown_convert"]
         else:
             return CommandDict.DEFAULT_OPT_MARKDOWN_CONVERT
 
@@ -232,7 +232,7 @@ class CommandDict:
 
         """
         if "formatted" in self.command_dict["commands"][command].keys():
-            return self.command_dict["commands"][command]["formatted"] == "true"
+            return self.command_dict["commands"][command]["formatted"]
         else:
             return CommandDict.DEFAULT_OPT_FORMATTED
 
@@ -245,7 +245,7 @@ class CommandDict:
 
         """
         if "code" in self.command_dict["commands"][command].keys():
-            return self.command_dict["commands"][command]["code"] == "true"
+            return self.command_dict["commands"][command]["code"]
         else:
             return CommandDict.DEFAULT_OPT_CODE
 
