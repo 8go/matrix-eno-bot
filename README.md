@@ -155,9 +155,16 @@ With these commands a system administrator can maintain his Matrix installation 
 ## Other Features
 
 - sample scripts are in `bash` and in `python3`, but can be in any language (JavaScript, Go, Microsoft .bat files, etc.)
-- easily extendable via command dictionary in convenient commands.yaml configuration file (:clap: for the excellent work of @wolterhv, :thumbsup:)
+- easily extendable via command dictionary in convenient commands.yaml configuration file
   - This means that you can modify this bot without any programming knowledge or knowledge of Python.
   - The user can add new commands simple by editing a text file. So new commands can be added via configuration, rather than via programming.
+  - :clap: for the excellent work of @wolterhv, :thumbsup:
+- scripts or programs have access to the name of the sender. 
+  - The user with name "@john:server.org" sends the text (command) `hello` to the bot. The bot can respond by using the name of the sender, i.e. the 
+    bot could respond with "Hi @john:server.org, how are you today?". The name of the sender is stored in the enviroment variable `ENO_SENDER` available
+    to all scripts or programs. 
+    Look at script [hello.sh](https://github.com/8go/matrix-eno-bot/blob/master/eno/scripts/hello.sh) to see an example of how it can be used. 
+  - :clap: for the PR by @troglodyne :thumbsup:
 - matrix-eno-bot combines well with [matrix-commander](https://github.com/8go/matrix-commander). Configure `matrix-commander` as another eno bot device.
 - `matrix-commander` can then be used very easily for monitoring the system. An admin can set up a cron job that runs every 15 minutes, e.g. to check CPU temperature, or to check a log file for signs of an intrusion (e.g. SSH or Web Server log files). If anything abnormal is found by the cron job, the cron job fires off a bot message to the admin.
 - matrix-eno-bot and `matrix-commander` can share all of the "commands" or scripts
