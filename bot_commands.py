@@ -178,11 +178,21 @@ class Command(object):
             logger.debug(
                 f'OS command "{argv_list[0]}" with ' f'args: "{argv_list[1:]}"'
             )
+
+            # Set environment variables for the subprocess here.
+            # Env variables like PATH, etc. are already set. In order to not lose
+            # any set env variables we must merge existing env variables with the
+            # new env variable(s). subprocess.Popen must be called with the
+            # complete combined list.
+            new_env = os.environ.copy()
+            new_env['ENO_SENDER'] = self.event.sender
+
             run = subprocess.Popen(
                 argv_list,  # list of argv
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 universal_newlines=True,
+                env=new_env,
             )
             output, std_err = run.communicate()
             output = output.strip()
