@@ -179,10 +179,11 @@ class Command(object):
                 f'OS command "{argv_list[0]}" with ' f'args: "{argv_list[1:]}"'
             )
 
-            # Set any special ENV vars you want available to the process here.
-            # Note that subprocess.Popen *replaces* env here, so we have to augment
-            # the existing ENV for the daemon user to ensure more or less "expected"
-            # operation (important RE $PATH, etc).
+            # Set environment variables for the subprocess here.
+            # Env variables like PATH, etc. are already set. In order to not lose
+            # any set env variables we must merge existing env variables with the
+            # new env variable(s). subprocess.Popen must be called with the
+            # complete combined list.
             new_env = os.environ.copy()
             new_env['ENO_SENDER'] = self.event.sender
 
