@@ -89,7 +89,7 @@ function dojson() {
                 break # jump out of infinite loop
             fi
             if [ "$mndate" == "$ydate" ]; then
-                echo "$mnjson" | jq ".data[$x] | .url, .title , .content " 2>>/dev/null
+                echo "$mnjson" | jq ".data[$x] | .url, .title , .content " | sed 's/\\n/\'$'\n''/g' | sed 's/\!\[\]//g' 2>>/dev/null
             fi
             x=$(($x + 1))
             if [[ "$mndate" > "$ydate" ]]; then
@@ -99,7 +99,7 @@ function dojson() {
         ;;
     '' | 1)
         [ "${DEBUG,,}" == "true" ] && echo "You requested 1 news article"
-        echo "$mnjson" | jq '.data[0] | .url, .title , .content ' 2>>/dev/null
+        echo "$mnjson" | jq '.data[0] | .url, .title , .content ' | sed 's/\\n/\'$'\n''/g' | sed 's/\!\[\]//g' 2>>/dev/null
         ;;
     2)
         [ "${DEBUG,,}" == "true" ] && echo "You requested ${arg1,,} news articles"
