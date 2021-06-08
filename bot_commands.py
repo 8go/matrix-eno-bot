@@ -23,6 +23,7 @@ import re  # regular expression matching
 import subprocess
 from sys import platform
 import traceback
+import time
 from chat_functions import send_text_to_room
 
 logger = logging.getLogger(__name__)
@@ -186,6 +187,8 @@ class Command(object):
             # complete combined list.
             new_env = os.environ.copy()
             new_env['ENO_SENDER'] = self.event.sender
+            new_env['ENO_TIMESTAMP_SENT'] = str(int(self.event.server_timestamp / 1000))
+            new_env['ENO_TIMESTAMP_RECEIVED'] = time.strftime("%s")
 
             run = subprocess.Popen(
                 argv_list,  # list of argv
