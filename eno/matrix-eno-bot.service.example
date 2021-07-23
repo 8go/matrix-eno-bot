@@ -28,6 +28,8 @@ Description=matrix-eno-bot
 User=matrix-neo-bot
 Group=users
 Environment=PYTHONUNBUFFERED=1
+# change this to match your server's timezone
+Environment=TZ=UTC
 # change this PATH to fit your needs
 Environment=PATH=/home/matrix-eno-bot/matrix-eno-bot/eno/scripts:/home/matrix-eno-bot/bin:/home/matrix-eno-bot/.local/bin:/home/matrix-eno-bot/Scripts:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 # change this PATH to fit your PATH
