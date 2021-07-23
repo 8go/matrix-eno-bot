@@ -24,7 +24,7 @@ And a month after creating this repo by pure chance, this [Urban Dictionary link
 # install dependencies, matrix-nio
 # for more detail see https://github.com/poljar/matrix-nio
 sudo apt install python3 python3-requests libolm-dev
-pip install "matrix-nio[e2e]" Markdown PyYAML
+pip install -r requirements.txt
 # install matrix-eno-bot
 git clone https://github.com/8go/matrix-eno-bot
 # https://github.com/8go/matrix-eno-bot includes the nio-template files.
