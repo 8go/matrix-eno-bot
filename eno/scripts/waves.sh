@@ -24,10 +24,7 @@ fi
 # $1: location, city
 # $2: optional, "full" for more details
 function getwaves() {
-    if [[ "$1" == "" ]]; then
-        echo "No waves report for empty location. Set location."
-        return
-    fi
+    if [[ "$1" == "" ]]; then echo "No waves report for empty location. Set location.";  return; fi
     if [[ "$2" == "full" ]] || [[ "$2" == "f" ]] || [[ "$2" == "more" ]] || [[ "$2" == "+" ]]; then
         # give a full, long listing of forecast
         echo "To be implemented" # to be implemented
@@ -44,15 +41,27 @@ function getwaves() {
             fullpage=$($TORIFY wget -q -O - https://magicseaweed.com/${1} 2>/dev/null)
             nowsummaryblock=$(echo $fullpage | xmllint --html --xpath '//div[@class="msw-col-fluid-inner"]/div[@class="row margin-bottom"]/div[@class="col-lg-7 col-md-7 col-sm-12 col-xs-12 msw-fc-current"]/div[@class="row"]/div[@class="col-lg-7 col-md-7 col-sm-7 col-xs-12"]' - 2>/dev/null)
             wavesnow=$(echo $fullpage | xmllint --html --xpath '//div[@class="msw-col-fluid-inner"]/div[@class="row margin-bottom"]/div[@class="col-lg-7 col-md-7 col-sm-12 col-xs-12 msw-fc-current"]/div[@class="row"]/div[@class="col-lg-7 col-md-7 col-sm-7 col-xs-12"]/ul[@class="rating rating-large clearfix"]/li[1]' - 2>/dev/null | sed -e 's/<[^>]*>//g' | xargs 2>/dev/null)
-            weathernow=$(echo $nowsummaryblock | xmllint --html --xpath '//p[1]' - 2>/dev/null | sed -e 's/<[^>]*>//g' | sed -e 's/&Acirc;&deg;c/C/g' | sed -e 's/&Acirc;&deg;f/F/g' | sed -e 's/°c/C/g' | sed -e 's/°f/F/g' | sed -e 's/Â//g' | sed -e 's/^ /Wind /g' | sed -e 's/     /; Weather  /g' | sed -e 's/Air/; Air Temp /g' | sed -e 's/Sea/; Sea Temp /g' | tr -s ' ' | sed -e 's/ ;/;/g' | sed -e 's/ $//' | sed -e 's/ C$/C/' | sed -e 's/ F$/F/')
+            weathernow=$(echo $nowsummaryblock | xmllint --html --xpath '//p[1]' - 2>/dev/null | sed -e 's/<[^>]*>//g' | sed -e 's/&Acirc;&deg;c/C/g' | sed -e 's/&Acirc;&deg;f/F/g' | sed -e 's/°c/C/g' | sed -e 's/°f/F/g' | sed -e 's/Â//g' | sed -e '1!b;s/^ /Wind /'  | sed -e 's/     /; Weather  /g' | sed -e 's/Air/; Air Temp /g' | sed -e 's/Sea/; Sea Temp /g' | tr -s ' ' | sed -e 's/ ;/;/g' | sed -e 's/ $//' | sed -e 's/ C$/C/' | sed -e 's/ F$/F/' | sed -e 's/; Weather//' | sed -e 's/^ //')
             # todayblock=$(echo $fullpage | xmllint --html --xpath '//div[@class="scrubber-bars-container"]/div[@class="row margin-bottom"]/div[@class="col-lg-7 col-md-7 col-sm-12 col-xs-12 msw-fc-current"]/div[@class="row"]/div[@class="col-lg-7 col-md-7 col-sm-7 col-xs-12"]' - 2>/dev/null)
-            todayconditions=$(echo $fullpage | xmllint --html --xpath '//div[@class="table-responsive-xs"]/table/tbody[1]/tr[@class=" is-first"]' - 2>/dev/null | sed -e 's/&Acirc;&deg;c/C/g' | sed -e 's/&Acirc;&deg;f/F/g' | sed -e 's/°c/C/g' | sed -e 's/°f/F/g' | sed -e 's/<[^>]*>//g' | sed -e 's/%/%\n/g' | column -t -s' ')
+            # old version: till May 2022:  todayconditions=$(echo $fullpage | xmllint --html --xpath '//div[@class="table-responsive-xs"]/table/tbody[1]/tr[@class=" is-first row-hightlight"]' - 2>/dev/null | sed -e 's/&Acirc;&deg;c/C/g' | sed -e 's/&Acirc;&deg;f/F/g' | sed -e 's/°c/C/g' | sed -e 's/°f/F/g' | sed -e 's/<[^>]*>//g' | sed -e 's/%/%\n/g' | column -t -s' ')
+            # index 4 is 6am, index 5 is 9am, index 6 is noon, index 7 is 3pm, index 8 is 6pm
+            line=$(echo -e "Time\tSurf\tSwell\tFr\t\tWind\tAir") # Title, Heading of Table
+            for i in 4 5 6 7 8 ; do
+                todaytablerow=$(echo $fullpage | xmllint --html --xpath "//table[@class='table table-primary table-forecast allSwellsActive msw-js-table msw-units-large']/tbody[1]/tr[contains(@class,'is-first')][$i]" - 2> /dev/null)
+                t=$todaytablerow
+                lineTime=$(echo $t | xmllint --html --xpath '//td[1]/small[1]/text()' - 2>/dev/null) # echo 6am
+                lineSurf=$(echo $t | xmllint --html --xpath '//td[2]'        - 2>/dev/null | sed 's|</b>|-|g' | sed 's|<[^>]*>||g' | xargs | tr -s " ") # echo 0.5-0.8m    for surf
+                lineSwel=$(echo $t | xmllint --html --xpath '//td[4]'        - 2>/dev/null | sed 's|</b>|-|g' | sed 's|<[^>]*>||g' | xargs | tr -s " ") # echo 0.5-0.8m    for swell
+                linePeri=$(echo $t | xmllint --html --xpath '//td[5]'        - 2>/dev/null | sed 's|</b>|-|g' | sed 's|<[^>]*>||g' | xargs | tr -s " ") # echo 9s   as wave period
+                lineTemp=$(echo $t | xmllint --html --xpath '//td[last()-1]' - 2>/dev/null | sed 's|</b>|-|g' | sed 's|<[^>]*>||g' | xargs | sed -e 's/Â//g' | sed -e 's/&Acirc;&deg;c/C/g' | sed -e 's/&Acirc;&deg;f/F/g' | sed -e 's/°c/C/g' | sed -e 's/°f/F/g' | tr -s " ") # echo 18C   as temperature
+                lineWind=$(echo $t | xmllint --html --xpath '//td[last()-4]' - 2>/dev/null | sed 's|</b>|-|g' | sed 's|<[^>]*>||g' | xargs | tr -s " " | sed -e 's/ /-/' | sed -e 's/ //') # echo 22 34 kph   as wind
+                line=$(echo -e "$line\n$lineTime\t$lineSurf\t$lineSwel\t$linePeri\t$lineWind\t$lineTemp")
+            done
+            todayconditions=$line
             if [ "$wavesnow" != "" ]; then
                 echo "$wavesnow"
                 echo "$weathernow"
-                echo "Time  Surf      Swell      2nd Swell Wind         Air      "
-                # echo "12am  0.7-1.1m  0.8m  10s  0.5m  4s  10  9   kph  19C  100%"
-                echo "$todayconditions"
+                echo -e "$todayconditions" | column -t
                 break
             else
                 echo "retrying ..."
