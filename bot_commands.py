@@ -44,7 +44,7 @@ class Command(object):
             config (Config): Bot configuration parameters
             command_dict (CommandDict): Command dictionary
             command (str): The command and arguments
-            room_dict (CommandDict): Room dictionary
+            room_dict (RoomDict): Room dictionary
             room (nio.rooms.MatrixRoom): The room the command was sent in
             event (nio.events.room_events.RoomMessageText): The event
                 describing the command
