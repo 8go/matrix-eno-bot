@@ -48,6 +48,16 @@ matrix:
   # If true, device_name of bot will be changed to value given in device_name.
   change_device_name: false
   # encrytion is enabled by default
+  accept_invitations: true
+  # Should the bot accept invitations? If disabled then the bot must be
+  # added to the desired rooms "manually". This configuration is mostly
+  # useful in combination with the room-specific processing "feature"
+  # (refer to storage.room_dict_path)
+  process_audio: false
+  # Should the bot also process audio messages (need to be downloaded
+  # before processing)? If true the audio content will be passed (just
+  # as with text content) to the handling command program, but base64
+  # encoded inside a "data:" url
 
 storage:
   # The path to the database
@@ -57,6 +67,8 @@ storage:
   store_filepath: "./store"
   # The path to the command dictionary configuration file
   command_dict_filepath: "./commands.yaml"
+  # The path to the room dictionary configuration file
+  room_dict_filepath: "./room.yaml"
 
 # Logging setup
 logging:

@@ -1,0 +1,398 @@
+#
+# ***** Initialization *****
+# This is an example rooms dictionary configuration. Mind you, this is an
+# example configuration meant to convey the structure of the configuration
+# file. It will probably not work as is in your environment. 
+# So, copy this file to "rooms.yaml". Then modify and adjust 
+# "rooms.yaml" to suit your needs. E.g. On Linux you would do
+
+# $ cp rooms.yaml.example rooms.yaml
+# $ nano rooms.yaml # adjust to your needs, especially the paths!
+
+
+# ***** Paths *****
+
+# The bot needs to find your commands. For that the bot uses the PATH 
+# variable. By adjusting the "paths" values below you can add additional
+# paths to the system PATH variable. If the bot is using commands that
+# are not already on the system PATH, you must add the additional command
+# paths below. 
+# Furthermore, make sure the bot has read and execute access
+# to the commands, otherwise they won't work.
+# Here we show two example command paths. Adjust them as needed.
+paths:
+  - /home/YOURUSER/.local/lib/matrix-eno-bot/eno/scripts
+  - /home/YOURUSER/.local/etc/matrix-eno-bot/bin
+
+
+# ***** Rooms *****
+
+# Rooms are a list of (only for config purposes) room names that
+# each then contain a set of command config options. The distinctive
+# aspect of this config is that the command regex processing is not
+# applied to an incoming message, but to the name of the (matrix)
+# room. Thus, any message received in such a room is always handled
+# by the configured command.
+#
+# #### example config ####
+#
+# paths:
+#  - ./scripts
+#
+#rooms:
+#  room1:
+#    regex:             "^Room: 1$|One$"
+#    cmd:               room1.py
+#    markdown_convert:  false
+#    formatted:         true
+#    code:              false
+#
+#  room2:
+#    regex:             "^Room: 2$|Two$"
+#    cmd:               room2.py
+#    markdown_convert:  false
+#    formatted:         false
+#    code:              false
+#
+# #### example config ####
+
+
+# ***** Commands *****
+
+# Commands are a list of specifications for your bot commands.
+# The children of the "commands" key are the command names. 
+# Command names are nick names like "alert" or "backup". 
+# Each command, listed by its name, has the following 
+# keys (or properties):
+#
+#   cmd:               string: name of the command, executable, or script.
+#                      The bot will attempt to execute this command when
+#                      triggered. The bot will call this "cmd" and pass 
+#                      the given arguments to it.
+#                      Example: "date" (a command provided by the OS)
+#   help:              string: help string explaining the command.
+#                      This is useful when you forget how use the command.
+#                      The help string provided will be listed and shown with
+#                      the 'help' command of the bot.
+#                      Example: "returns the current date of the server"
+#   regex:             string: regex pattern whose matches are valid ways to call the 
+#                      command.
+#                      If a bot message from a room that matches a regular expression,
+#                      then the corresponding command will be executed. 
+#                      If a bot message matched multiple regular expressions, 
+#                      only the first matching command will be executed!
+#                      It is recommended that the regular expressions are used
+#                      such that they are mutually exclusive to avoid
+#                      situation where one messages matches multiple regular
+#                      expressions.
+#                      When the "regex" matches the "cmd" will be triggered.
+#                      Example: "^date$" (only the exact string of "date"
+#                      will match) 
+#   markdown_convert:  true or false: Specifies whether the message reply has
+#                      been formatted in markdown.
+#                      The bot will convert this markdown-formatted input
+#                      and convert it into an HTML-like format understood by
+#                      Matrix, so that the bot reply shows up visually as
+#                      nice as the markdown input.
+#                      Defaults to true.
+#                      Example: Your command output is a markdown formatted
+#                      string such as "I *really* like it!" Set 
+#                      markdown_convert to true and the receiver gets the
+#                      text "I really like it!" with the word "really"
+#                      visually in italic. In short, use "true", whenever
+#                      your command output is a markdown-formatted string;
+#                      false otherwise.
+#   formatted:         true or false: Specifies whether message reply will
+#                      be sent as a formatted message.
+#                      Defaults to true.
+#   code:              true or false: Specifies whether message reply will
+#                      be formatted as a code block with fixed-size font.
+#                      If set to "true", "markdown_convert" will be ignored.
+#                      Defaults to false.
+#   split:             string: if this string is set, splits the message reply
+#                      into multiple messages wherever the string specified in
+#                      split occurs.
+#                      Defaults to None, no message splitting by default.
+#                      Example: "\n\n\n" (Wherever the command output contains 
+#                      two empty lines, the output will be split. Each piece
+#                      will be sent as a separate reply message.
+commands:
+
+  # There are 3 kinds of commands.
+  # a) built-in commands
+  # b) pre-packed commands provided by the matrix-eno-bot repo
+  # c) your custom commands that you can add
+  #    To add your custom commands go to the end of file, you will
+  #    find a "Custom commands" header there. Add them there.
+
+  # Built-in commands
+  # ---------------
+  # help : "help" is a reserved word, so don't use it as a custom command!
+  # reload : "reload" is a reserved word, so don't use it as a custom command!
+
+
+  # Pre-packed commands provided by the matrix-eno-bot repo
+  # -------------------------------------------------------
+
+  # alert if too many resources are used, best to use with cron
+  alert:
+    regex:             "alert$|^alert .*$|^alarm$|^alarm .*|^alert.sh$"
+    cmd:               alert.sh
+    help:              shows if any CPU, RAM, or disk thresholds have been exceeded
+    markdown_convert:  false
+    formatted:         true
+    code:              true
+  # perform a backup to disk
+  backup:
+    regex:             "^backup$|^backup .*$|^backup.sh$"
+    cmd:               backup.sh
+    help:              performs backup on server
+    markdown_convert:  false
+    formatted:         true
+    code:              true
+  # get BTC ticker
+  btc:
+    regex:             "^btc$|^btc .*$|^bitcoin$|^btc.sh$"
+    cmd:               btc.sh
+    help:              gives Bitcoin BTC price info
+    markdown_convert:  false
+    formatted:         true
+    code:              true
+  # get cheatsheets, see https://github.com/cheat/cheat
+  cheatsheet:
+    regex:             "^cheat$|^cheatsheet$|^chuleta$|^cheat.sh$|^cheat .*$|^cheatsheet .*$|^chuleta .*$|^cheat.sh .*$"
+    cmd:               cheat
+    help:              get cheatsheets, see https://github.com/cheat/cheat
+    markdown_convert:  false
+    formatted:         true
+    code:              true
+  # check status and look for updates
+  # see also: upgrade
+  check:
+    regex:             "^check$|^chk$|^status$|^state$|^check .*$|^chk .*|^status .*$|^state .*$|^check.sh$|^check.sh .*"
+    cmd:               check.sh
+    help:              check status, health status, updates, etc.
+    markdown_convert:  false
+    formatted:         true
+    code:              false
+  # CPU temperature, to monitor the CPU temperatures
+  cputemp:
+    regex:             "^cpu$|^temp$|^temperature$|^celsius$|^cputemp.*$|^hot$|^chaud$"
+    cmd:               cputemp.sh
+    help:              give the current CPU temperatures
+    markdown_convert:  false
+    formatted:         true
+    code:              false
+  # get date and time
+  datetime:
+    regex:             "^date$|^time$|^tiempo$|^hora$|^temps$|^heure$|^heures$|^datum$|^zeit$|^datetime.sh$"
+    cmd:               datetime.sh
+    help:              give current date and time of server
+    markdown_convert:  false
+    formatted:         true
+    code:              true
+  # duckduckgo
+  ddg:
+    regex:             "^ddg$|^ddg .*$|^duck$|^duck .*$|^duckduckgo$|^duckduckgo .*$|^search$|^search .*|^ddg.sh$|^ddg.sh .*"
+    cmd:               ddg.sh
+    help:              search the web with DuckDuckGo search
+    markdown_convert:  false
+    formatted:         true
+    code:              false
+  # disk space, monitor disk space
+  disks:
+    regex:             "^disks$|^disk$|^full$|^space$|^disks.sh$"
+    cmd:               disks.sh
+    help:              see how full your disks or mountpoints are
+    markdown_convert:  false
+    formatted:         true
+    code:              true
+  # echo, trivial example to have the bot respond
+  echo:
+    regex:             "^echo$|^echo .*"
+    cmd:               echo.py
+    help:              bot echoes back your input
+    markdown_convert:  false
+    formatted:         true
+    code:              false
+  # get ETH ticker
+  eth:
+    regex:             "^eth$|^eth .*$|^ethereum$|^eth.sh$"
+    cmd:               eth.sh
+    help:              gives Ethereum price info
+    markdown_convert:  false
+    formatted:         true
+    code:              true
+  # get firewall settings
+  firewall:
+    regex:             "^firewall$|^fw$|^firewall .*$|^firewall.sh$"
+    cmd:               firewall.sh
+    help:              list the firewall settings and configuration
+    markdown_convert:  false
+    formatted:         true
+    code:              true
+  # get a compliment, hello
+  hello:
+    regex:             "^salut$|^ciao$|^hallo$|^hi$|^servus$|^hola$|^hello$|^hello .*$|^bonjour$|^bonne nuit$|^hello.sh$"
+    cmd:               hello.sh
+    help:              gives you a friendly compliment
+    markdown_convert:  false
+    formatted:         true
+    code:              false
+  # Hacker News
+  hn:
+    regex:             "^hn$|^hn .*$|^hn.sh$|^hn.sh .*"
+    cmd:               hn.sh
+    help:              read Hacker News, fetches front page headlines from Hacker News
+    markdown_convert:  false
+    formatted:         true
+    code:              false
+  # Messari News
+  mn:
+    regex:             "^mn$|^mn .*$|^mn.sh$|^mn.sh .*"
+    cmd:               mn.sh
+    help:              read Messari News, fetches the latest news articles from Messari
+    markdown_convert:  false
+    formatted:         true
+    code:              false
+    split:             "\n\n\n"
+  # message of the day
+  motd:
+    regex:             "^motd|^motd .*|^motd.sh$"
+    cmd:               motd.sh
+    help:              gives you the Linux Message Of The Day
+  # platform info
+  platforminfo:
+    regex:             "^platform$|^platform .*|^platforminfo.py$"
+    cmd:               platforminfo.py
+    help:              give hardware and operating system platform information
+  # ps, host status
+  ps:
+    regex:             "^ps$|^ps .*|^ps.sh$"
+    cmd:               ps.sh
+    help:              print current CPU, RAM and Disk utilization of server
+    markdown_convert:  false
+    formatted:         true
+    code:              true
+  # restart, reset
+  restart:
+    regex:             "^restart$|^reset$|^restart .*$|^reset .*$|^restart.sh$|^restart.sh .*"
+    cmd:               restart.sh
+    help:              restart the bot itself, or Matrix services
+    markdown_convert:  false
+    formatted:         true
+    code:              false
+  # RSS
+  rss:
+    regex:             "^rss$|^feed$|^rss .*$|^feed .*$|^rss.sh$|^rss.sh .*"
+    cmd:               rss.sh
+    help:              read RSS feeds
+    markdown_convert:  false
+    formatted:         true
+    code:              false
+    split:             "\n\n\n"
+  # Stock-to-flow
+  s2f:
+    regex:             "^s2f$|^mys2f.py.*|^flow$|^s2f|^flow .*$|^s2f .$|^s-to-f$|^stock-to-flow .*$|^eyf$|^eyf .*$|^e-y-f$"
+    cmd:               s2f.sh
+    help:              give Stock-to-flow info
+    markdown_convert:  false
+    formatted:         true
+    code:              true
+  # tides
+  tides:
+    regex:             "^tide$|^tides$|^marea|^mareas|^tide .*$|^tides .*$|^marea .*$|^mareas .*$|^gehzeiten .*$|^tides.sh$|^tides.sh .*"
+    cmd:               tides.sh
+    help:              give tidal forecast
+    markdown_convert:  false
+    formatted:         true
+    code:              false
+  # top CPU, MEM consumers
+  top:
+    regex:             "^top$|^top .*|^top.sh$|^top.sh .*"
+    cmd:               top.sh
+    help:              list 5 top CPU and RAM consuming processes
+    markdown_convert:  false
+    formatted:         true
+    code:              true
+  # get TOTP 2FA pin
+  totp:
+    regex:             "^otp$|^totp$|^otp .*$|^totp .*$"
+    cmd:               totp.sh
+    help:              get 2FA Two-factor-authentication TOTP PIN via bot message
+    markdown_convert:  false
+    formatted:         true
+    code:              false
+  # twitter
+  twitter:
+    regex:             "^tweet$|^twitter$|^tweet .*$|^twitter .*$|^twitter.sh$|^twitter.sh .*"
+    cmd:               twitter.sh
+    help:              read latest user tweets from Twitter
+    markdown_convert:  false
+    formatted:         true
+    code:              false
+  # update components
+  update:
+    regex:             "^update$|^upgrade$|^update .*$|^upgrade .*$|^update.sh$|^update.sh .*"
+    cmd:               update.sh
+    help:              update operating sytem
+    markdown_convert:  false
+    formatted:         true
+    code:              false
+  # list matrix users by issuing a REST API query
+  users:
+    regex:             "^usr$|^user$|^users$|^users .*$|^users.sh$"
+    cmd:               users.sh
+    help:              list registered Matrix users
+    markdown_convert:  false
+    formatted:         true
+    code:              true
+  # wake up PC via wake-on-LAN
+  wake:
+    regex:             "^wake$|^wakeup$|^wake .*$|^wakeup .*$|^wakelan .*$|^wake.sh$|^wake .*"
+    cmd:               wake.sh
+    help:              wake up another PC via LAN
+    markdown_convert:  false
+    formatted:         true
+    code:              false
+  # waves and surf conditions
+  # see also: tides
+  waves:
+    regex:             "^wave$|^waves$|^wave .*$|^waves .*$|^surf$|^surf .*$|^waves.sh$"
+    cmd:               waves.sh
+    help:              give waves and surf forecast
+    markdown_convert:  false
+    formatted:         true
+    code:              true
+  # get weather forecast
+  weather:
+    regex:             "^weather$|^tiempo$|^wetter$|^temps$|^weather .*$|^tiempo .*$|^eltiempo .*$|^wetter .*$|^temps .*$|^weather.sh$|^weather.sh .*"
+    cmd:               weather.sh
+    help:              give weather forecast
+    markdown_convert:  false
+    formatted:         true
+    code:              true
+  # fetch web pages
+  web:
+    regex:             "^www$|^web$|^web .*$|^www .*$|^browse$|^browse .*|^web.sh$|^web.sh .*"
+    cmd:               web.sh
+    help:              surf the web, get a web page (JavaScript pages not supported)
+    markdown_convert:  false
+    formatted:         true
+    code:              false
+  # whoami
+  whoami:
+    regex:             "^w$|^who$|^whoami$"
+    cmd:               whoami.py
+    help:              return information about the user, whose unix account is running the bot
+    markdown_convert:  false
+    formatted:         true
+    code:              false
+
+
+  # Custom commands
+  # ---------------
+
+  # add your custom commands here
+  
+# End of commands configuration file

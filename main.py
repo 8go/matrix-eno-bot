@@ -27,6 +27,8 @@ from nio import (
     AsyncClient,
     AsyncClientConfig,
     RoomMessageText,
+    RoomMessageAudio,
+    RoomEncryptedAudio,
     InviteMemberEvent,
     LoginError,
     LocalProtocolError,
@@ -78,7 +80,10 @@ async def main():  # noqa
     # Set up event callbacks
     callbacks = Callbacks(client, store, config)
     client.add_event_callback(callbacks.message, (RoomMessageText,))
-    client.add_event_callback(callbacks.invite, (InviteMemberEvent,))
+    if config.accept_invitations:
+        client.add_event_callback(callbacks.invite, (InviteMemberEvent,))
+    if config.process_audio:
+        client.add_event_callback(callbacks.audio, (RoomEncryptedAudio,))
     client.add_to_device_callback(
         callbacks.to_device_cb, (KeyVerificationEvent,))
 
