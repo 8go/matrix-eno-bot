@@ -34,7 +34,7 @@ SERVER_ERROR_MSG = "Bot encountered an error. Here is the stack trace: \n"
 class Command(object):
     """Use this class for your bot commands."""
 
-    def __init__(self, client, store, config, command_dict, command, room, event):
+    def __init__(self, client, store, config, command_dict, command, room_dict, room, event):
         """Set up bot commands.
 
         Arguments:
@@ -44,6 +44,7 @@ class Command(object):
             config (Config): Bot configuration parameters
             command_dict (CommandDict): Command dictionary
             command (str): The command and arguments
+            room_dict (RoomDict): Room dictionary
             room (nio.rooms.MatrixRoom): The room the command was sent in
             event (nio.events.room_events.RoomMessageText): The event
                 describing the command
@@ -54,6 +55,7 @@ class Command(object):
         self.config = config
         self.command_dict = command_dict
         self.command = command
+        self.room_dict = room_dict
         self.room = room
         self.event = event
         # self.args: list : list of arguments
@@ -70,7 +72,9 @@ class Command(object):
         """Process the command."""
 
         logger.debug(
-            f"bot_commands :: Command.process: {self.command} {self.room}"
+            f"bot_commands :: Command.process: processing '" +
+            re.sub('^data:(\w+)/(\w+);(.+)', 'data:\\1/\\2;...', self.command) +
+            f"' from room '{self.room.display_name}'"
         )
 
         if re.match(
@@ -80,6 +84,18 @@ class Command(object):
             self.commandlower,
         ):
             await self._show_help()
+
+        # command from room dict
+        elif self.room_dict.match(self.room.display_name):
+            matched_cmd = self.room_dict.get_last_matched_room()
+            await self._os_cmd(
+                cmd=self.room_dict.get_cmd(matched_cmd),
+                args=self.room_dict.get_opt_args(matched_cmd),
+                markdown_convert=self.room_dict.get_opt_markdown_convert(matched_cmd),
+                formatted=self.room_dict.get_opt_formatted(matched_cmd),
+                code=self.room_dict.get_opt_code(matched_cmd),
+                split=self.room_dict.get_opt_split(matched_cmd),
+            )
 
         # command from command dict
         elif self.command_dict.match(self.commandlower):
@@ -139,9 +155,10 @@ class Command(object):
             self.client,
             self.room.room_id,
             (
-                f"Unknown command `{self.command}`. "
-                "Try the `help` command for more information."
+                f"{self.command}\n"
+                "Try the *help* command for more information."
             ),
+            split="\n",
         )
 
     async def _os_cmd(
@@ -175,7 +192,10 @@ class Command(object):
         """
         try:
             # create a combined argv list, e.g. ['date', '--utc']
-            argv_list = [cmd] + args
+            argv_list = [cmd]
+            if args is not None:
+                argv_list += args
+
             logger.debug(
                 f'OS command "{argv_list[0]}" with ' f'args: "{argv_list[1:]}"'
             )
@@ -192,11 +212,13 @@ class Command(object):
 
             run = subprocess.Popen(
                 argv_list,  # list of argv
+                stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 universal_newlines=True,
                 env=new_env,
             )
+            run.stdin.write( self.command )
             output, std_err = run.communicate()
             output = output.strip()
             std_err = std_err.strip()
