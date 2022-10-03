@@ -83,7 +83,7 @@ async def main():  # noqa
     if config.accept_invitations:
         client.add_event_callback(callbacks.invite, (InviteMemberEvent,))
     if config.process_audio:
-        client.add_event_callback(callbacks.audio, (RoomEncryptedAudio,))
+        client.add_event_callback(callbacks.audio, (RoomMessageAudio,RoomEncryptedAudio))
     client.add_to_device_callback(
         callbacks.to_device_cb, (KeyVerificationEvent,))
 

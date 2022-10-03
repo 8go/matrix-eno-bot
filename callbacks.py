@@ -26,6 +26,8 @@ from nio import (
     KeyVerificationCancel,
     KeyVerificationKey,
     KeyVerificationMac,
+    RoomMessageAudio,
+    RoomEncryptedAudio,
     ToDeviceError,
     LocalProtocolError,
     DownloadError,
@@ -115,7 +117,7 @@ class Callbacks(object):
         Arguments:
         ---------
             room (nio.rooms.MatrixRoom): The room the event came from
-            event (nio.events.room_events.RoomMessageAudio): The event
+            event (nio.events.room_events.RoomMessageAudio|nio.events.room_events.RoomEncryptedAudio): The event
                 defining the (audio) message
 
         """
@@ -123,17 +125,9 @@ class Callbacks(object):
         if event.sender == self.client.user:
             return
 
-        # Ignore non-ogg audio
-        if event.body[-4:] != '.ogg':
-            logger.debug(
-                f"Bot received (apparently) non-ogg data for room {room.display_name} | "
-                f"{room.user_name(event.sender)}: {event.body}"
-            )
-            return
-
         # download the audio data
         logger.debug(
-            f"Bot downloading audio for room {room.display_name} | "
+            f"Bot downloading audio data for message from room '{room.display_name}' | "
             f"{room.user_name(event.sender)}: {event.url}"
         )
         mxc = urlparse(event.url)
@@ -141,8 +135,10 @@ class Callbacks(object):
         if isinstance(response, DownloadError):
             logger.error(f"Bot download of media resulted in error")
             return
-        data = decrypt_attachment(response.body, event.key["k"], event.hashes["sha256"], event.iv)
-        data = f"data:audio/ogg;base64,{b64encode(data).decode('utf-8')}"
+        data = response.body
+        if isinstance(event, RoomEncryptedAudio):
+            data = decrypt_attachment(data, event.key["k"], event.hashes["sha256"], event.iv)
+        data = f"data:{event.source['content']['info']['mimetype']};base64,{b64encode(data).decode('utf-8')}"
 
         command = Command(self.client, self.store,
                           self.config, self.command_dict, data, self.room_dict, room, event)

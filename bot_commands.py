@@ -72,7 +72,9 @@ class Command(object):
         """Process the command."""
 
         logger.debug(
-            f"bot_commands :: Command.process: {self.command} {self.room}"
+            f"bot_commands :: Command.process: processing '" +
+            re.sub('^data:(\w+)/(\w+);(.+)', 'data:\\1/\\2;...', self.command) +
+            f"' from room '{self.room.display_name}'"
         )
 
         if re.match(
