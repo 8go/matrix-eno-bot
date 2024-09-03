@@ -26,12 +26,21 @@ from nio import (
     KeyVerificationCancel,
     KeyVerificationKey,
     KeyVerificationMac,
+    RoomMessageAudio,
+    RoomEncryptedAudio,
     ToDeviceError,
     LocalProtocolError,
+    DownloadError,
+    DownloadResponse,
 )
+from nio.crypto import decrypt_attachment
+
 import logging
 import traceback
+from base64 import b64encode
+from urllib.parse import urlparse
 from command_dict import CommandDict
+from room_dict import RoomDict
 
 logger = logging.getLogger(__name__)
 
@@ -55,6 +64,7 @@ class Callbacks(object):
         self.config = config
         self.command_dict = CommandDict(config.command_dict_filepath)
         self.command_prefix = config.command_prefix
+        self.room_dict = RoomDict(config.room_dict_filepath)
 
     async def message(self, room, event):
         """Handle an incoming message event.
@@ -98,7 +108,40 @@ class Callbacks(object):
             msg = msg[len(self.command_prefix):]
 
         command = Command(self.client, self.store,
-                          self.config, self.command_dict, msg, room, event)
+                          self.config, self.command_dict, msg, self.room_dict, room, event)
+        await command.process()
+
+    async def audio(self, room, event):
+        """Handle an incoming audio event.
+
+        Arguments:
+        ---------
+            room (nio.rooms.MatrixRoom): The room the event came from
+            event (nio.events.room_events.RoomMessageAudio|nio.events.room_events.RoomEncryptedAudio): The event
+                defining the (audio) message
+
+        """
+        # Ignore messages from ourselves
+        if event.sender == self.client.user:
+            return
+
+        # download the audio data
+        logger.debug(
+            f"Bot downloading audio data for message from room '{room.display_name}' | "
+            f"{room.user_name(event.sender)}: {event.url}"
+        )
+        mxc = urlparse(event.url)
+        response = await self.client.download(server_name=mxc.netloc, media_id=mxc.path.strip("/"), filename=None, allow_remote=True)
+        if isinstance(response, DownloadError):
+            logger.error(f"Bot download of media resulted in error")
+            return
+        data = response.body
+        if isinstance(event, RoomEncryptedAudio):
+            data = decrypt_attachment(data, event.key["k"], event.hashes["sha256"], event.iv)
+        data = f"data:{event.source['content']['info']['mimetype']};base64,{b64encode(data).decode('utf-8')}"
+
+        command = Command(self.client, self.store,
+                          self.config, self.command_dict, data, self.room_dict, room, event)
         await command.process()
 
     async def invite(self, room, event):

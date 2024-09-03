@@ -75,6 +75,8 @@ class Config(object):
             ["storage", "store_filepath"], required=True)
         self.command_dict_filepath = self._get_cfg(
             ["storage", "command_dict_filepath"], default=None)
+        self.room_dict_filepath = self._get_cfg(
+            ["storage", "room_dict_filepath"], default=None)
 
         # Create the store folder if it doesn't exist
         if not os.path.isdir(self.store_filepath):
@@ -112,6 +114,10 @@ class Config(object):
             ["matrix", "trust_own_devices"], default=False, required=False)
         self.change_device_name = self._get_cfg(
             ["matrix", "change_device_name"], default=False, required=False)
+        self.process_audio = self._get_cfg(
+            ["matrix", "process_audio"], default=False, required=False)
+        self.accept_invitations = self._get_cfg(
+            ["matrix", "accept_invitations"], default=True, required=False)
 
     def _get_cfg(
             self,
