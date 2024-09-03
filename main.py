@@ -171,7 +171,7 @@ async def main():  # noqa
             await client.close()
 
 try:
-    asyncio.get_event_loop().run_until_complete(main())
+    asyncio.run(main())
 except Exception:
     logger.debug(traceback.format_exc())
     sys.exit(1)
