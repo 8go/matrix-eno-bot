@@ -1,0 +1,20 @@
+paths:
+  - /home/matrix/bin  
+rooms:
+  - regex: room_name_1
+    cmd: command
+    args: args
+    help: help
+    markdown_convert: True
+    formatted: True
+    code: True
+    split: split
+  - regex: room_name_2
+    cmd: command
+    args: args
+    help: help
+    markdown_convert: True
+    formatted: False
+    code: False
+    split: split
+

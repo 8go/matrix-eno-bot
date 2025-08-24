@@ -64,17 +64,17 @@ class RoomDict:
             with open(room_dict_filepath) as fobj:
                 logger.debug(f"Loading room dictionary at {room_dict_filepath}")
                 self.room_dict = yaml.safe_load(fobj.read())
-
             if "rooms" in self.room_dict.keys():
                 self.rooms = self.room_dict["rooms"]
-
+            else:
+                print("no rooms key in self.rooms")
             if "paths" in self.room_dict.keys():
                 os.environ["PATH"] = os.pathsep.join(self.room_dict["paths"]+[os.environ["PATH"]])
                 logger.debug(f'Path modified. Now: {os.environ["PATH"]}.')
-
+            else:
+                print("no paths in room_dict keys")
         except FileNotFoundError:
             logger.error(f"File not found: {room_dict_filepath}")
-
         return
 
     def is_empty(self):
@@ -122,10 +122,7 @@ class RoomDict:
         if "rooms" in self.room_dict.keys():
             for com in self.room_dict["rooms"]:
                 # Implement rule 3
-                if type(self.room_dict["rooms"][com]) != dict:
-                    raise RoomDictSanityError(
-                        "Defined rooms must be dictionaries.")
-                for opt in self.room_dict["rooms"][com].keys():
+                for opt in com.keys():
                     # Implement rule 4
                     if opt not in ("regex",
                                    "cmd",
@@ -140,14 +137,14 @@ class RoomDict:
                             f"\"{opt}\".")
                     # Implement rule 6
                     elif opt in ("markdown_convert", "formatted", "code"):
-                        if type(self.room_dict["rooms"][com][opt]) != bool:
+                        if type(com[opt]) != bool:
                             raise RoomDictSanityError(
                                 f"In room \"{com}\", invalid value for option "
                                 f"\"{opt}\" found: " \
-                                f"\"{self.room_dict['rooms'][com][opt]}\"")
+                                f"\"{com[opt]}\"")
                     # Implement rule 5
                     else:
-                        if type(self.room_dict["rooms"][com][opt]) != str:
+                        if type(com[opt]) != str:
                             raise RoomDictSanityError(
                                 f"In room \"{com}\", room option " \
                                 f"\"{opt}\" must be a string.")
